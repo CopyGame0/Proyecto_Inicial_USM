@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.http import HttpResponse
+from django.shortcuts import render
 def pagina_principal(request):
-    return HttpResponse("<h>Bienvenido a NutriVida</h1>")
+    return render(request, "inicio/index.html")
