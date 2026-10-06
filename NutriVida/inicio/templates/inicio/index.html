@@ -1,12 +1,25 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'inicio/style.css' %}">
     <title>NutriVida</title>
 </head>
 <body>
-    <h1>Bienvenido a NutriVida</h1>
-    <h3>Página principal</h3>
+    <header>
+        <div class="logo">
+            <h1 class="nombre-empresa">   NutriVida</h1>
+        </div>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li><a href="#">Recetas</a></li>
+                    <li><a href="#">Planificación Semanal</a></li>
+                    <li><a href="#">Tu Perfil</a></li>
+                </ul>
+            </nav>
+    </header>
 </body>
-</html>

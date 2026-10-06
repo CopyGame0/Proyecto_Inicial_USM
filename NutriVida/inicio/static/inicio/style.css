@@ -1,0 +1,37 @@
+h1{
+    display: flex;
+    justify-content:center;
+    color: #fdfffc;
+    font-family:  Helvetica;
+    padding: 0 20px;
+}
+body{
+    background-color: #FDFFFC !important;
+}
+header{
+    display: flex ;
+    justify-content: space-between;
+    height: 80px;
+    background-color: #0E544B;
+    color: #fdfffc;
+}
+/* Pone las opciones del menú en horizontal y quita los puntos negros */
+header ul {
+    display: flex;
+    font-family: sans-serif;
+    list-style: none; /* Quita las viñetas/puntos */
+    gap: 20px;        /* Espacio entre Recetas, Planificación y Perfil */
+    margin-right: 30px;
+    padding: 0;
+}
+
+/* Centra el logo y el menú verticalmente */
+header {
+    align-items: center;
+}
+
+/* Estilo para que los enlaces no tengan subrayado */
+header a {
+    text-decoration: none;
+    color: #fdfffc;
+}
