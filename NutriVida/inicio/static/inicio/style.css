@@ -2,8 +2,8 @@ h1{
     display: flex;
     justify-content:center;
     color: #fdfffc;
-    font-family:  Helvetica;
-    padding: 0 20px;
+    font-family:  Helvetica, sans-serif;
+    padding: 0 30px;
 }
 body{
     background-color: #FDFFFC !important;
