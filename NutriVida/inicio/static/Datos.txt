@@ -1,0 +1,9 @@
+Pantone de colores
+#120302 
+#0E544B 
+#A59132
+#C1292E
+#FDFFFC
+
+Tipografia
+Helvetica sans-serif
