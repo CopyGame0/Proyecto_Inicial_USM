@@ -26,3 +26,9 @@ Una aplicacion web para ayudar a conseguir resetas en base una pauta nutricional
 `pip install -r .\requirements.txt` instala dependencias del txt
 
 `py manage.py startapp app` crea una app llamada "app" (remplazar por nombre)
+
+
+------------
+
+`python manage.py makemigrations` prepara las migraciones, es decir, prepara implementar los modelos a la base de datos
+`python manage.py migrate` implementa los modelos a la base de datos local

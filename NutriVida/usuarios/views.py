@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 
 def registrar_usuario(request):
@@ -7,7 +8,9 @@ def registrar_usuario(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             usuario = form.save()
+            login(request, usuario)
             messages.success(request, f'¡Cuenta creada exitosamente para {usuario.username}!')
+            return redirect('home') 
     else:
         form = CustomUserCreationForm()
         

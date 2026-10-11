@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'inicio',
-    'usuarios'
+    'usuarios',
 ]
 
 MIDDLEWARE = [
@@ -104,9 +104,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-cl' #se cambio de 'en-us' para tener los mensajes en español :P
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'UTC-3'
 
 USE_I18N = True
 
@@ -128,4 +128,4 @@ MAILERS = {
     },
 }
 
-AUTH_USER_MODEL = 'usuarios.Perfil'
+AUTH_USER_MODEL = 'usuarios.Usuario'

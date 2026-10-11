@@ -1,0 +1,5 @@
+<!-- Nota: Codigo generado por Claude, espero que funcione. No le se a HTML-->
+{% extends 'inicio/base.html' %}
+{% block content %}
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Registrarme</button></form>
+{% endblock %}
