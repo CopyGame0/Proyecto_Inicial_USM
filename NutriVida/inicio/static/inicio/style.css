@@ -14,8 +14,8 @@ header{
     height: 80px;
     background-color: #0E544B;
     color: #fdfffc;
+    align-items: center;
 }
-/* Pone las opciones del menú en horizontal y quita los puntos negros */
 header ul {
     display: flex;
     font-family: sans-serif;
@@ -23,11 +23,6 @@ header ul {
     gap: 20px;        /* Espacio entre Recetas, Planificación y Perfil */
     margin-right: 30px;
     padding: 0;
-}
-
-/* Centra el logo y el menú verticalmente */
-header {
-    align-items: center;
 }
 
 /* Estilo para que los enlaces no tengan subrayado */
