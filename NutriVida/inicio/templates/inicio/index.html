@@ -1,14 +1,15 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="{% static 'inicio/style.css' %}">
+    <link rel="stylesheet" href="{% static 'inicio/style.css' %}?v=1.1">
     <title>NutriVida</title>
 </head>
-<body>
+<body> <! aca esta la info del header >
     <header>
         <div class="logo">
             <h1 class="nombre-empresa">   NutriVida</h1>
@@ -21,5 +22,11 @@
                 </ul>
             </nav>
     </header>
-
+<main> <! aca esta la info del cuerpo >
+    <div class="info_inicial">
+        <h2>Quienes somos</h2>
+        <p>En NutriVida, nos dedicamos a ayudarte a alcanzar tus objetivos de salud y bienestar a través de una alimentación equilibrada y personalizada. Nuestro equipo de expertos en nutrición está aquí para guiarte en cada paso del camino.</p>
+        <p>Explora nuestras herramientas y recursos para crear un plan de alimentación que se adapte a tus necesidades y estilo de vida. ¡Comienza tu viaje hacia una vida más saludable con NutriVida hoy mismo!</p>
+    </div>
+    </main>
 </body>
