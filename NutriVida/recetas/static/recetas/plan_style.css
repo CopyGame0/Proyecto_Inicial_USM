@@ -1,0 +1,97 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    font-family: Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #FDFFFC;
+    color: #120302;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    padding: 0 30px;
+    background-color: #0E544B;
+}
+
+header h1 {
+    margin: 0;
+    color: #FDFFFC;
+}
+
+header a {
+    color: #FDFFFC;
+    text-decoration: none;
+}
+
+main {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.dia {
+    margin-bottom: 40px;
+}
+
+.dia h2 {
+    color: #0E544B;
+    border-bottom: 2px solid #A59132;
+    padding-bottom: 6px;
+}
+
+.comidas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.receta {
+    background-color: #0E544B;
+    color: #FDFFFC;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.receta img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.receta h3 {
+    font-size: 1.05rem;
+}
+
+.receta ul {
+    padding-left: 18px;
+    font-size: 0.9rem;
+}
+
+.ver-receta {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 8px 16px;
+    background-color: #FDFFFC;
+    color: #0E544B;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.ver-receta:hover {
+    background-color: #A59132;
+    color: #FDFFFC;
+}
+
+.mensaje-error {
+    background-color: #C1292E;
+    color: #FDFFFC;
+    padding: 16px 20px;
+    border-radius: 12px;
+}

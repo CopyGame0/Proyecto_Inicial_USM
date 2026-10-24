@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriVida - Tu plan semanal</title>
+    <link rel="stylesheet" href="{% static 'recetas/plan_style.css' %}?v=1.0">
+</head>
+<body>
+    <header>
+        <h1>Tu plan semanal</h1>
+        <a href="{% url 'formulario' %}">Volver al formulario</a>
+    </header>
+
+    <main>
+        {% if error %}
+            <p class="mensaje-error">{{ error }}</p>
+        {% elif not plan %}
+            <p class="mensaje-error">No encontramos recetas con esas condiciones. Pruebe con rangos más amplios.</p>
+        {% else %}
+            {% for dia in plan %}
+                <section class="dia">
+                    <h2>{{ dia.dia }}</h2>
+                    <div class="comidas">
+                        {% for receta in dia.comidas %}
+                            <article class="receta">
+                                {% if receta.imagen %}
+                                    <img src="{{ receta.imagen }}" alt="{{ receta.titulo }}">
+                                {% endif %}
+                                <h3>{{ receta.titulo }}</h3>
+                                <ul>
+                                    {% if receta.calorias is not None %}<li>Calorías: {{ receta.calorias }} kcal</li>{% endif %}
+                                    {% if receta.proteina is not None %}<li>Proteína: {{ receta.proteina }} g</li>{% endif %}
+                                    {% if receta.carbohidratos is not None %}<li>Carbohidratos: {{ receta.carbohidratos }} g</li>{% endif %}
+                                    {% if receta.azucar is not None %}<li>Azúcar: {{ receta.azucar }} g</li>{% endif %}
+                                    {% if receta.minutos %}<li>Tiempo: {{ receta.minutos }} min</li>{% endif %}
+                                </ul>
+                                {% if receta.url %}
+                                    <a class="ver-receta" href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta</a>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        {% endif %}
+    </main>
+</body>
+</html>
