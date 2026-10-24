@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'inicio/style.css' %}?v=1.1">
     <title>NutriVida</title>
 </head>
-<body> <! aca esta la info del header >
+<body> <!--aca esta la info del header--> 
     <header>
         <div class="logo">
             <h1 class="nombre-empresa">   NutriVida</h1>
@@ -18,15 +17,29 @@
             <nav>
                 <ul>
                     <li><a href="#"> </a></li>
-                    <li><a href="#">Planificación Semanal</a></li>
+                    <li><a href="{% url 'formulario' %}">Planificación Semanal</a></li>
                 </ul>
             </nav>
     </header>
-<main> <! aca esta la info del cuerpo >
-    <div class="info_inicial">
-        <h2>Quienes somos</h2>
-        <p>En NutriVida, nos dedicamos a ayudarte a alcanzar tus objetivos de salud y bienestar a través de una alimentación equilibrada y personalizada. Nuestro equipo de expertos en nutrición está aquí para guiarte en cada paso del camino.</p>
-        <p>Explora nuestras herramientas y recursos para crear un plan de alimentación que se adapte a tus necesidades y estilo de vida. ¡Comienza tu viaje hacia una vida más saludable con NutriVida hoy mismo!</p>
+    <main> <!--aca esta la info del cuerpo -->
+        <div class="info_inicial">
+            <h2>Quienes somos</h2>
+            <p>En NutriVida, nos dedicamos a ayudarte a alcanzar tus objetivos de salud y bienestar a través de una alimentación equilibrada y personalizada. Nuestro equipo de expertos en nutrición está aquí para guiarte en cada paso del camino.</p>
+            <p>Explora nuestras herramientas y recursos para crear un plan de alimentación que se adapte a tus necesidades y estilo de vida. ¡Comienza tu viaje hacia una vida más saludable con NutriVida hoy mismo!</p>
+        </div>
+        <div class="login">
+    <h2>Accede a tu cuenta</h2>
+    <p>Registrate para configurar tus preferencias de recetas o inicia sesión si ya tienes</p>
+    <div class="botones">
+        <!-- Envoltorio del botón 1 -->
+        <div class="btn-wrapper btn-wrapper-primary">
+            <a href="{% url 'registro' %}" class="btn btn-primary">Registrarse</a>
+        </div>
+        <!-- Envoltorio del botón 2 -->
+        <div class="btn-wrapper btn-wrapper-secondary">
+            <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
+        </div>
     </div>
+</div>
     </main>
 </body>
