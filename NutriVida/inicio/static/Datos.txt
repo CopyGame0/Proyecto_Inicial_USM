@@ -6,4 +6,4 @@ Pantone de colores
 #FDFFFC
 
 Tipografia
-Helvetica sans-serif
+Helvetica sans-serif    
