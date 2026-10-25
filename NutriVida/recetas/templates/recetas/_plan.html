@@ -1,0 +1,41 @@
+{% comment %}
+Pedazo reutilizable: solo las tarjetas del plan (sin <html>, <head> ni <body>).
+Lo usan plan.html (página completa) y el formulario (mediante JavaScript).
+{% endcomment %}
+{% if error %}
+    <p class="mensaje-error">{{ error }}</p>
+{% elif not plan %}
+    <p class="mensaje-error">No encontramos recetas con esas condiciones. Pruebe con rangos más amplios.</p>
+{% else %}
+    {% if total < maximo %}
+        <p class="aviso">Solo encontramos {{ total }} de {{ maximo }} recetas con esos filtros,
+        por eso el plan tiene menos comidas. Pruebe con menos ingredientes o rangos más amplios.</p>
+    {% endif %}
+
+    {% for dia in plan %}
+        <section class="dia">
+            <h2>{{ dia.dia }}</h2>
+            <div class="comidas">
+                {% for receta in dia.comidas %}
+                    <article class="receta">
+                        {% if receta.imagen %}
+                            <img src="{{ receta.imagen }}" alt="{{ receta.titulo }}">
+                        {% endif %}
+                        <h3>{{ receta.titulo }}</h3>
+                        <ul>
+                            {% if receta.calorias is not None %}<li>Calorías: {{ receta.calorias }} kcal</li>{% endif %}
+                            {% if receta.proteina is not None %}<li>Proteína: {{ receta.proteina }} g</li>{% endif %}
+                            {% if receta.carbohidratos is not None %}<li>Carbohidratos: {{ receta.carbohidratos }} g</li>{% endif %}
+                            {% if receta.azucar is not None %}<li>Azúcar: {{ receta.azucar }} g</li>{% endif %}
+                            {% if receta.minutos %}<li>Tiempo: {{ receta.minutos }} min</li>{% endif %}
+                        </ul>
+                        {% if receta.id %}
+                            <!-- data-url: dirección de donde detalle.js trae la receta completa -->
+                            <button type="button" class="ver-receta" data-url="{% url 'detalle_receta' receta.id %}">Ver receta</button>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endfor %}
+{% endif %}

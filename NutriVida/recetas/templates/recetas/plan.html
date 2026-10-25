@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriVida - Tu plan semanal</title>
+    <link rel="stylesheet" href="{% static 'recetas/plan_style.css' %}?v=1.1">
+    <link rel="stylesheet" href="{% static 'recetas/plan_cards.css' %}?v=1.1">
+</head>
+<body>
+    <header>
+        <h1>Tu plan semanal</h1>
+        <a href="{% url 'formulario' %}">Volver al formulario</a>
+    </header>
+
+    <main>
+        {% include 'recetas/_plan.html' %}
+    </main>
+
+    <!-- ventana emergente donde se muestra la receta completa -->
+    <dialog id="detalle">
+        <div class="detalle-interior">
+            <button type="button" class="cerrar-detalle">Cerrar ✕</button>
+            <div id="detalle-contenido"></div>
+        </div>
+    </dialog>
+    <script src="{% static 'recetas/detalle.js' %}?v=1.0"></script>
+</body>
+</html>

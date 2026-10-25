@@ -13,38 +13,38 @@
     <h2>Utilice solo el formato solicitado en cada pregunta, de lo contrario no se podra verificar.
     </h2>
 
-    <form id="myform">
+    <form id="myform" method="get" action="{% url 'plan_semanal' %}">
         <label for="diet">Tipo de Dieta (Vegetariana, Vegana, Omnívora):</label>
-        <input type="text" id="diet" respuesta="diet" required>
+        <input type="text" id="diet" name="diet" required>
         <br> 
         <label for="intolerances">Intolerancias: (Separadas por una coma)</label>
-        <input type="text" id="intolerances" respuesta="intolerances" required>
+        <input type="text" id="intolerances" name="intolerances" required>
         <br>
         <label for="include_ingredients">Ingredientes a incluir:</label>
-        <input type="text" id="include_ingredients" respuesta="include_ingredients" required>
+        <input type="text" id="include_ingredients" name="include_ingredients" required>
         <br>
         <label for="exclude_ingredients">Ingredientes a excluir:</label>
-        <input type="text" id="exclude_ingredients" respuesta="exclude_ingredients" required>
+        <input type="text" id="exclude_ingredients" name="exclude_ingredients" required>
         <br>
         <label for="min_protein">Proteína mínima (g):</label>
-        <input type="number" id="min_protein" respuesta="min_protein" required>
+        <input type="number" id="min_protein" name="min_protein" required>
         <label for="max_protein">Proteína máxima (g):</label>
-        <input type="number" id="max_protein" respuesta="max_protein" required>
+        <input type="number" id="max_protein" name="max_protein" required>
         <br>
         <label for="min_carbs">Carbohidratos mínimos (g):</label>
-        <input type="number" id="min_carbs" respuesta="min_carbs" required>
+        <input type="number" id="min_carbs" name="min_carbs" required>
         <label for="max_carbs">Carbohidratos máximos (g):</label>
-        <input type="number" id="max_carbs" respuesta="max_carbs" required>
+        <input type="number" id="max_carbs" name="max_carbs" required>
         <br>
         <label for="min_cal">Calorías mínimas (g):</label>
-        <input type="number" id="min_cal" respuesta="min_cal" required>
+        <input type="number" id="min_cal" name="min_cal" required>
         <label for="max_cal">Calorías máximas (g):</label>
-        <input type="number" id="max_cal" respuesta="max_cal" required>
+        <input type="number" id="max_cal" name="max_cal" required>
         <br>
         <label for="min_sugar">Azúcar mínima (g):</label>
-        <input type="number" id="min_sugar" respuesta="min_sugar" required>
+        <input type="number" id="min_sugar" name="min_sugar" required>
         <label for="max_sugar">Azúcar máxima (g):</label>
-        <input type="number" id="max_sugar" respuesta="max_sugar" required>
+        <input type="number" id="max_sugar" name="max_sugar" required>
         <br>
         <button type="submit">Enviar</button>
 
