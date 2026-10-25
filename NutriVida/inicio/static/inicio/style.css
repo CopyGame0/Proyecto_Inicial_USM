@@ -15,7 +15,7 @@ header{
     background-color:  #0E544B; /* Gradiente amarillo a verde */
     color: #fdfffc;
     align-items: center;
-    margin bottom: 50px;
+    margin-bottom: 50px;
 }
 header ul {
     display: flex;
@@ -30,14 +30,14 @@ header a {
     color: #fdfffc;
 }
 main {
-    padding top: 100px;
+    padding-top: 100px;
     display: flex;        
     gap: 30px;
 }
 .info_inicial {
     font-family: Helvetica, sans-serif;
     font-size:larger;
-    background-color: #0E544B; !important;
+    background-color: #0E544B !important;
     color:#FDFFFC;
     justify-content: flex-start;
     margin-top: 100px;
@@ -51,7 +51,7 @@ main {
 .login {
     font-family: Helvetica, sans-serif;
     font-size:larger;
-    background-color: #FDFFFC; !important;
+    background-color: #FDFFFC !important;
     color: #123C2A;
     justify-content: space-between;
     align-items: flex-start;
@@ -70,8 +70,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    gap-top: 100px;
-    margin-top: 25px;
+    margin-top: 100px;
     align-items: center;
 }
 .btn {
