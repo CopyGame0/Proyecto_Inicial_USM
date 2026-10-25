@@ -6,9 +6,17 @@ y recibe datos listos para mostrar. Así, si mañana cambian de API,
 solo se toca este archivo.
 """
 import unicodedata
-
+from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
 import requests
 from django.conf import settings
+
+#funcion para traducir, usaremos esto mas tarde
+def _traducir_ingredientes(lista):
+    try:
+        return es_a_en_lista(lista)
+    except ErrorTraduccion:
+        raise ErrorPlan("El traductor no está disponible ahora. Intente de nuevo "
+                        "en un momento o escriba los ingredientes en inglés.")
 
 URL_BUSQUEDA = "https://api.spoonacular.com/recipes/complexSearch"
 
@@ -94,9 +102,10 @@ def construir_parametros(datos):
     if traducidas:
         params["intolerances"] = ",".join(traducidas)
 
-    # --- ingredientes (Spoonacular los entiende en inglés) --------------
-    incluir = _lista_separada_por_comas(datos.get("include_ingredients", ""))
-    excluir = _lista_separada_por_comas(datos.get("exclude_ingredients", ""))
+    # --- ingredientes (Spoonacular los entiende en inglés) -------------- 
+    incluir = _traducir_ingredientes(_lista_separada_por_comas(datos.get("include_ingredients", "")))
+    excluir = _traducir_ingredientes(_lista_separada_por_comas(datos.get("exclude_ingredients", "")))
+    
     if incluir:
         params["includeIngredients"] = ",".join(incluir)
     if excluir:
@@ -185,7 +194,9 @@ def armar_plan(recetas):
     Si Spoonacular devuelve menos de 15, se arman menos días.
     """
     recetas = [simplificar(r) for r in recetas]
+    titulos = _traducir_ingredientes([r["titulo"] for r in recetas])
     plan = []
+    
     for i in range(DIAS_DEL_PLAN):
         comidas = recetas[i * COMIDAS_POR_DIA:(i + 1) * COMIDAS_POR_DIA]
         if comidas:

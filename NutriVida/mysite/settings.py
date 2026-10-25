@@ -28,6 +28,7 @@ DEBUG = True
 
 load_dotenv()
 SPOONACULAR_API_KEY = os.getenv('SPOONACULAR_API_KEY')
+DEEPL_API_KEY = os.getenv('DEEPL_API_KEY')
 
 ALLOWED_HOSTS = []
 
