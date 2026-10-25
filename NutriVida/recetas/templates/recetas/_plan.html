@@ -29,8 +29,9 @@ Lo usan plan.html (página completa) y el formulario (mediante JavaScript).
                             {% if receta.azucar is not None %}<li>Azúcar: {{ receta.azucar }} g</li>{% endif %}
                             {% if receta.minutos %}<li>Tiempo: {{ receta.minutos }} min</li>{% endif %}
                         </ul>
-                        {% if receta.url %}
-                            <a class="ver-receta" href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta</a>
+                        {% if receta.id %}
+                            <!-- data-url: dirección de donde detalle.js trae la receta completa -->
+                            <button type="button" class="ver-receta" data-url="{% url 'detalle_receta' receta.id %}">Ver receta</button>
                         {% endif %}
                     </article>
                 {% endfor %}

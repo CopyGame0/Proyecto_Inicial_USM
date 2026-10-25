@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .services import TOTAL_RECETAS, ErrorPlan, generar_plan
+from .services import TOTAL_RECETAS, ErrorPlan, generar_plan, obtener_receta
 
 
 def plan_semanal(request):
@@ -21,3 +21,17 @@ def plan_semanal(request):
 
     plantilla = "recetas/_plan.html" if request.GET.get("parcial") else "recetas/plan.html"
     return render(request, plantilla, contexto)
+
+
+def detalle_receta(request, receta_id):
+    """
+    Devuelve SOLO el pedazo de HTML con una receta completa (ingredientes
+    y pasos, ya en español). El JavaScript lo pega dentro de la ventana
+    emergente de la página.
+    """
+    contexto = {"receta": None, "error": None}
+    try:
+        contexto["receta"] = obtener_receta(receta_id)
+    except ErrorPlan as e:
+        contexto["error"] = str(e)
+    return render(request, "recetas/_detalle.html", contexto)

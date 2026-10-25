@@ -9,6 +9,7 @@ import unicodedata
 from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
 import requests
 from django.conf import settings
+from django.core.cache import cache
 
 #funcion para traducir, usaremos esto mas tarde
 def _traducir_ingredientes(lista):
@@ -176,6 +177,7 @@ def _nutriente(receta, nombre):
 def simplificar(receta):
     """Deja solo los datos que la plantilla necesita."""
     return {
+        "id": receta.get("id"),
         "titulo": receta.get("title", "Sin título"),
         "imagen": receta.get("image", ""),
         "minutos": receta.get("readyInMinutes"),
@@ -194,7 +196,7 @@ def armar_plan(recetas):
     Si Spoonacular devuelve menos de 15, se arman menos días.
     """
     recetas = [simplificar(r) for r in recetas]
-    titulos = _traducir_ingredientes([r["titulo"] for r in recetas])
+    # titulos = _traducir_ingredientes([r["titulo"] for r in recetas])
     plan = []
     
     for i in range(DIAS_DEL_PLAN):
@@ -209,3 +211,69 @@ def generar_plan(datos):
     params = construir_parametros(datos)
     recetas = buscar_recetas(params)
     return armar_plan(recetas)
+
+
+URL_DETALLE = "https://api.spoonacular.com/recipes/{id}/information"
+
+
+def obtener_receta(receta_id):
+    """
+    Trae UNA receta completa (ingredientes y pasos) y la traduce al español.
+    Se guarda en caché 24 h: si otro usuario abre la misma receta, no se
+    gasta ni la API de Spoonacular ni el traductor.
+    """
+    clave_cache = f"receta_{receta_id}"
+    guardada = cache.get(clave_cache)
+    if guardada:
+        return guardada
+
+    clave = getattr(settings, "SPOONACULAR_API_KEY", "")
+    if not clave:
+        raise ErrorPlan("Falta configurar la clave de Spoonacular (SPOONACULAR_API_KEY).")
+
+    try:
+        respuesta = requests.get(
+            URL_DETALLE.format(id=receta_id),
+            params={"apiKey": clave, "includeNutrition": "false"},
+            timeout=15,
+        )
+    except requests.RequestException:
+        raise ErrorPlan("No se pudo conectar con Spoonacular. Intente de nuevo en un momento.")
+
+    if respuesta.status_code == 404:
+        raise ErrorPlan("No encontramos esa receta.")
+    if respuesta.status_code in (401, 403):
+        raise ErrorPlan("La clave de Spoonacular no es válida.")
+    if respuesta.status_code == 402:
+        raise ErrorPlan("Se agotó el límite diario de consultas de Spoonacular.")
+    if respuesta.status_code != 200:
+        raise ErrorPlan(f"Spoonacular respondió con un error ({respuesta.status_code}).")
+
+    datos = respuesta.json()
+    titulo = datos.get("title", "Sin título")
+    ingredientes = [i["original"] for i in datos.get("extendedIngredients", []) if i.get("original")]
+    pasos = []
+    for bloque in datos.get("analyzedInstructions", []):
+        pasos += [p["step"] for p in bloque.get("steps", []) if p.get("step")]
+
+    # Un solo viaje al traductor: título + ingredientes + pasos
+    originales = [titulo] + ingredientes + pasos
+    traducidos = en_a_es_lista(originales)
+    n = len(ingredientes)
+
+    receta = {
+        "id": receta_id,
+        "titulo": traducidos[0],
+        "imagen": datos.get("image", ""),
+        "minutos": datos.get("readyInMinutes"),
+        "porciones": datos.get("servings"),
+        "url": datos.get("sourceUrl", ""),
+        "ingredientes": traducidos[1:1 + n],
+        "pasos": traducidos[1 + n:],
+    }
+
+    # Si el traductor falló, en_a_es_lista devuelve la MISMA lista de entrada:
+    # en ese caso no se guarda en caché, para reintentar la próxima vez.
+    if traducidos is not originales:
+        cache.set(clave_cache, receta, 60 * 60 * 24)
+    return receta
