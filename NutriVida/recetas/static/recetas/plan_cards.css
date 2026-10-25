@@ -1,0 +1,173 @@
+/* Estilos de las TARJETAS de recetas y de la ventana con la receta completa.
+   Se usan en la página /plan/ y también debajo del formulario. */
+
+#resultado {
+    width: 100%;
+    max-width: 1100px;
+}
+
+.cargando {
+    color: #0E544B;
+    text-align: center;
+}
+
+.dia {
+    margin-bottom: 40px;
+}
+
+.dia h2 {
+    color: #0E544B;
+    border-bottom: 2px solid #A59132;
+    padding-bottom: 6px;
+    max-width: none;
+    text-align: left;
+    font-weight: 700;
+}
+
+.comidas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.receta {
+    background-color: #0E544B;
+    color: #FDFFFC;
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.receta img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.receta h3 {
+    font-size: 1.05rem;
+}
+
+.receta ul {
+    padding-left: 18px;
+    font-size: 0.9rem;
+}
+
+/* botón "Ver receta" (es un <button>, no un enlace) */
+.ver-receta {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 8px 16px;
+    background-color: #FDFFFC;
+    color: #0E544B;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ver-receta:hover {
+    background-color: #A59132;
+    color: #FDFFFC;
+}
+
+.mensaje-error {
+    background-color: #C1292E;
+    color: #FDFFFC;
+    padding: 16px 20px;
+    border-radius: 12px;
+}
+
+.aviso {
+    background-color: #A59132;
+    color: #FDFFFC;
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+/* ---------- ventana emergente con la receta completa ---------- */
+dialog#detalle {
+    width: 90%;
+    max-width: 700px;
+    max-height: 85vh;
+    padding: 0;
+    border: none;
+    border-radius: 16px;
+    background-color: #FDFFFC;
+    color: #120302;
+    overflow-y: auto;
+}
+
+dialog#detalle::backdrop {
+    background-color: rgba(18, 3, 2, 0.6);
+}
+
+.detalle-interior {
+    padding: 24px;
+}
+
+.cerrar-detalle {
+    display: block;
+    margin: 0 0 12px auto;
+    padding: 8px 16px;
+    background-color: #0E544B;
+    color: #FDFFFC;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cerrar-detalle:hover {
+    background-color: #A59132;
+}
+
+.detalle h2 {
+    max-width: none;
+    margin-bottom: 12px;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0E544B;
+}
+
+.detalle img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+.detalle h3 {
+    margin: 18px 0 8px;
+    color: #0E544B;
+}
+
+.detalle ul,
+.detalle ol {
+    padding-left: 22px;
+}
+
+.detalle li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.detalle-meta {
+    margin-bottom: 4px;
+    color: #0E544B;
+    font-weight: bold;
+}
+
+.detalle-fuente {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+.detalle-fuente a {
+    color: #0E544B;
+}
