@@ -196,9 +196,12 @@ def armar_plan(recetas):
     Si Spoonacular devuelve menos de 15, se arman menos días.
     """
     recetas = [simplificar(r) for r in recetas]
-    # titulos = _traducir_ingredientes([r["titulo"] for r in recetas])
-    plan = []
+  
+    titulos = en_a_es_lista([r["titulo"] for r in recetas])
+    for receta, titulo in zip(recetas, titulos):
+        receta["titulo"] = titulo
     
+    plan = []
     for i in range(DIAS_DEL_PLAN):
         comidas = recetas[i * COMIDAS_POR_DIA:(i + 1) * COMIDAS_POR_DIA]
         if comidas:
