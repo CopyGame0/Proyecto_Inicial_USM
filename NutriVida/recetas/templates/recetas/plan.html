@@ -1,30 +1,60 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriVida - Tu plan semanal</title>
-    <link rel="stylesheet" href="{% static 'recetas/plan_style.css' %}?v=1.1">
-    <link rel="stylesheet" href="{% static 'recetas/plan_cards.css' %}?v=1.1">
+
+    <link rel="stylesheet" href="{% static 'recetas/plan_cards.css' %}?v=25">
+    <link rel="stylesheet" href="{% static 'recetas/plan_style.css' %}?v=25">
+    <title>Tu plan semanal - NutriVida</title>
 </head>
-<body>
+<body> <!--aca esta la info del header-->
     <header>
-        <h1>Tu plan semanal</h1>
-        <a href="{% url 'formulario' %}">Volver al formulario</a>
+        <div class="logo">
+            <h1 class="nombre-empresa">NutriVida</h1>
+        </div>
+        <div class="menu">
+            <nav>
+                <ul>
+                    <li><a href="{% url 'formulario' %}" class="btn-busqueda">Realizar otra búsqueda</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        {% include 'recetas/_plan.html' %}
+    <main> <!--aca esta la info del cuerpo -->
+        <!-- lado izquierdo: las recetas que no entraron al plan -->
+        <div class="otras-recetas">
+            <h2>Otras recetas</h2>
+            {% for receta in otras_recetas %}
+                <div class="fila-receta">
+                    <span>{{ receta.titulo }}</span>
+                    {% if receta.id %}
+                        <button type="button" class="ver-receta btn-ver-lista" data-url="{% url 'detalle_receta' receta.id %}">Ver</button>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <p class="sin-recetas">No se encontraron más recetas</p>
+        </div>
+
+        <!-- lado derecho: plan semanal con una receta por dia -->
+        <div class="plan-semanal">
+            <h2>Tu plan semanal</h2>
+            <div class="plan-dias">
+                {% include "recetas/_plan.html" %}
+            </div>
+        </div>
     </main>
 
-    <!-- ventana emergente donde se muestra la receta completa -->
+    <!-- ventana emergente de la receta -->
     <dialog id="detalle">
         <div class="detalle-interior">
-            <button type="button" class="cerrar-detalle">Cerrar ✕</button>
             <div id="detalle-contenido"></div>
+            <button type="button" class="cerrar-detalle">Cerrar X</button>
         </div>
     </dialog>
-    <script src="{% static 'recetas/detalle.js' %}?v=1.0"></script>
+
+    <script src="{% static 'recetas/detalle.js' %}"></script>
 </body>
 </html>

@@ -1,49 +1,52 @@
-{% comment %}
-Pedazo con UNA receta completa. Se carga dentro de la ventana emergente.
-{% endcomment %}
+{# una receta completa, sin html, head ni body: se carga dentro de la ventana emergente #}
 {% if error %}
     <p class="mensaje-error">{{ error }}</p>
 {% else %}
     <article class="detalle">
-        <h2>{{ receta.titulo }}</h2>
+        <!-- lado izquierdo: texto -->
+        <div class="detalle-texto">
+            <h2>{{ receta.titulo }}</h2>
 
-        {% if receta.imagen %}
-            <img src="{{ receta.imagen }}" alt="{{ receta.titulo }}">
-        {% endif %}
+            <p class="detalle-meta">
+                {% if receta.minutos %}<span>Tiempo: {{ receta.minutos }} min</span>{% endif %}
+                {% if receta.porciones %}<span>Porciones: {{ receta.porciones }}</span>{% endif %}
+            </p>
 
-        <p class="detalle-meta">
-            {% if receta.minutos %}Tiempo: {{ receta.minutos }} min{% endif %}
-            {% if receta.minutos and receta.porciones %} · {% endif %}
-            {% if receta.porciones %}Porciones: {{ receta.porciones }}{% endif %}
-        </p>
-
-        <h3>Ingredientes</h3>
-        {% if receta.ingredientes %}
-            <ul>
-                {% for ingrediente in receta.ingredientes %}
-                    <li>{{ ingrediente }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No hay lista de ingredientes disponible.</p>
-        {% endif %}
-
-        <h3>Preparación</h3>
-        {% if receta.pasos %}
-            <ol>
-                {% for paso in receta.pasos %}
-                    <li>{{ paso }}</li>
-                {% endfor %}
-            </ol>
-        {% else %}
-            <p>Esta receta no trae instrucciones paso a paso.</p>
-        {% endif %}
-
-        <p class="detalle-fuente">
-            Traducción automática. Datos de <a href="https://spoonacular.com/food-api" target="_blank" rel="noopener">spoonacular</a>.
-            {% if receta.url %}
-                <a href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta original (en inglés)</a>
+            <h3>Ingredientes</h3>
+            {% if receta.ingredientes %}
+                <ul>
+                    {% for ingrediente in receta.ingredientes %}
+                        <li>{{ ingrediente }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay lista de ingredientes disponible.</p>
             {% endif %}
-        </p>
+
+            <h3>Preparación</h3>
+            {% if receta.pasos %}
+                <ol>
+                    {% for paso in receta.pasos %}
+                        <li>{{ paso }}</li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>Esta receta no trae instrucciones paso a paso.</p>
+            {% endif %}
+
+            <p class="detalle-fuente">
+                Traducción automática. Datos de <a href="https://spoonacular.com/food-api" target="_blank" rel="noopener">spoonacular</a>.
+                {% if receta.url %}
+                    <a href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta original (en inglés)</a>
+                {% endif %}
+            </p>
+        </div>
+
+        <!-- lado derecho: imagen -->
+        {% if receta.imagen %}
+            <div class="detalle-imagen">
+                <img src="{{ receta.imagen }}" alt="{{ receta.titulo }}">
+            </div>
+        {% endif %}
     </article>
 {% endif %}

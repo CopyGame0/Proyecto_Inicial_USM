@@ -1,38 +1,161 @@
-/* Estilos de la PÁGINA COMPLETA del plan (/plan/).
-   Las tarjetas están en plan_cards.css, que se comparte con el formulario. */
-
-*, *::before, *::after {
+/* general */
+*{
     box-sizing: border-box;
+}
+body{
+    margin: 0;
+    background-color: #f9f9f9;
+    color: #120302;
     font-family: Helvetica, sans-serif;
 }
 
-body {
-    margin: 0;
-    background-color: #FDFFFC;
-    color: #120302;
-}
-
-header {
+/* header */
+header{
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 80px;
-    padding: 0 30px;
-    background-color: #0E544B;
-}
+    color: #0E544B;
+    margin-bottom: 50px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7e7;
 
-header h1 {
+}
+.nombre-empresa{
     margin: 0;
-    color: #FDFFFC;
+    padding: 0 30px;
 }
-
-header a {
+header ul{
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    margin: 0 30px 0 0;
+    padding: 0;
+}
+header a{
     color: #FDFFFC;
     text-decoration: none;
 }
+header a:hover{
+    color: #A59132;
+}
 
-main {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 20px;
+/* boton realizar otr busqueda */
+.btn-busqueda{
+    padding: 10px 24px;
+    border: 2px;
+    border-radius: 25px;
+    background: linear-gradient(to right, #A59132, #0E544B);
+    font-weight: bold;
+}
+.btn-busqueda:hover{
+    background: #FDFFFC;
+    color: #0E544B;
+}
+
+/* cuerpo dos columnas */
+main{
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 30px 50px;
+}
+
+/* otras recetas izqierda */
+.otras-recetas{
+    width: 300px;
+}
+.otras-recetas h2{
+    margin-top: 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #0E544B;
+    color: #0E544B;
+}
+.fila-receta{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    border: 2px solid #0E544B;
+    border-radius: 15px;
+    background-color: #ffffff;
+}
+.fila-receta span{
+    font-size: 0.9rem;
+}
+.btn-ver-lista{
+    padding: 5px 16px;
+    border: 2px solid;
+    background: #0E544B;
+    color: #FDFFFC;
+    font-size: 0.85rem;
+}
+.btn-ver-lista:hover{
+    background: #0E544B;
+    color: #FDFFFC;
+}
+.sin-recetas{
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* derecho plan semanal */
+.plan-semanal{
+    flex: 1;
+    padding: 25px;
+    border: 2px solid #0E544B;
+    border-radius: 25px;
+    background-color: #0E544B;
+} 
+/*titulo tu plan semanal*/
+.plan-semanal > h2{
+    margin-top: 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #FDFFFC;
+    color: #f9f9f9;
+}
+.plan-dias{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+/* todos los dias en una fila */
+.plan-dias .dia{
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    min-width: 150px;
+    margin-bottom: 0;
+}
+.plan-dias .dia h2{
+    border-bottom: none;
+}
+/* en el plan las comidas van una bajo otra y del mismo alto */
+.plan-dias .comidas{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.plan-dias .receta{
+    flex: 1;
+}
+/* los mensajes ocupan todo el ancho */
+.plan-dias .aviso,
+.plan-dias .mensaje-error{
+    width: 100%;
+    margin: 0;
+}
+
+/* pantallas chicas */
+@media (max-width: 800px){
+    main{
+        flex-direction: column;
+    }
+    .otras-recetas{
+        width: 100%;
+    }
 }
