@@ -1,45 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{% static 'inicio/style.css' %}?v=1.1">
-    <title>NutriVida</title>
+    <title>NutriVida - Planificación Semanal</title>
+    
+    <!-- Vinculación del CSS de la landing -->
+    <link rel="stylesheet" href="{% static 'inicio/style.css' %}?v=3.0">
 </head>
-<body> <!--aca esta la info del header--> 
-    <header>
+<body>
+
+    <!-- Header minimalista -->
+    <header class="header-landing">
         <div class="logo">
-            <h1 class="nombre-empresa">   NutriVida</h1>
+            <h1>NutriVida</h1>
         </div>
-        <div class="menu">
-            <nav>
-                <ul>
-                    <li><a href="#"> </a></li>
-                    <li><a href="{% url 'formulario' %}">Planificación Semanal</a></li>
-                </ul>
-            </nav>
     </header>
-    <main> <!--aca esta la info del cuerpo -->
-        <div class="info_inicial">
-            <h2>Quienes somos</h2>
-            <p>En NutriVida, nos dedicamos a ayudarte a alcanzar tus objetivos de salud y bienestar a través de una alimentación equilibrada y personalizada. Nuestro equipo de expertos en nutrición está aquí para guiarte en cada paso del camino.</p>
-            <p>Explora nuestras herramientas y recursos para crear un plan de alimentación que se adapte a tus necesidades y estilo de vida. ¡Comienza tu viaje hacia una vida más saludable con NutriVida hoy mismo!</p>
+
+    <!-- Contenido Principal: Tarjeta Flotante Única -->
+    <main class="landing-container">
+        <div class="card-hero-minimal">
+            <h2>Encuentra tu receta perfecta</h2>
+            <p>Genera un menú semanal adaptado a tus necesidades, calorías y preferencias en cuestión de segundos.</p>
+            
+            <div class="btn-glow-wrapper">
+                <a href="{% url 'formulario' %}" class="btn-hero-action">
+                    Comenzar mi busqueda
+                </a>
+            </div>
         </div>
-        <div class="login">
-    <h2>Accede a tu cuenta</h2>
-    <p>Registrate para configurar tus preferencias de recetas o inicia sesión si ya tienes</p>
-    <div class="botones">
-        <!-- boton registrarse -->
-        <div class="btn-wrapper btn-wrapper-primary">
-            <a href="{% url 'registro' %}" class="btn btn-primary">Registrarse</a>
-        </div>
-        <!-- boton iniciar sesion -->
-        <div class="btn-wrapper btn-wrapper-secondary">
-            <a href="{% url 'login' %}" class="btn btn-secondary">Iniciar Sesión</a>
-        </div>
-    </div>c
-</div>
     </main>
+
 </body>
+</html>

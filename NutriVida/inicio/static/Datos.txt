@@ -4,6 +4,6 @@ Pantone de colores
 #A59132
 #C1292E
 #FDFFFC
-
+#ffffff
 Tipografia
 Helvetica sans-serif    
