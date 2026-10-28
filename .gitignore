@@ -217,3 +217,5 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 NutriVida/recetas.rar
+
+.DS_Store
