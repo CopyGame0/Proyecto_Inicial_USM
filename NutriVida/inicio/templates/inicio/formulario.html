@@ -1,53 +1,114 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NutriVida formulario</title>
-    <link rel="stylesheet" href="{% static 'inicio/form_style.css' %}?v=1.0">
+    <title>NutriVida - Parámetros de Receta</title>
+    <link rel="stylesheet" href="{% static 'inicio/form_style.css' %}?v=4.0">
 </head>
 <body>
-    <h1>Rellene este formulario</h1>
 
-    <h2>Utilice solo el formato solicitado en cada pregunta, de lo contrario no se podra verificar.
-    </h2>
+    <!-- Header general -->
+    <header class="header-form">
+        <div class="logo">
+            <h1>NutriVida</h1>
+        </div>
+    </header>
 
-    <form id="myform" method="get" action="{% url 'plan_semanal' %}">
-        <label for="diet">Tipo de Dieta (Vegetariana, Vegana, Omnívora):</label>
-        <input type="text" id="diet" name="diet" required>
-        <br> 
-        <label for="intolerances">Intolerancias: (Separadas por una coma)</label>
-        <input type="text" id="intolerances" name="intolerances" required>
-        <br>
-        <label for="include_ingredients">Ingredientes a incluir:</label>
-        <input type="text" id="include_ingredients" name="include_ingredients" required>
-        <br>
-        <label for="exclude_ingredients">Ingredientes a excluir:</label>
-        <input type="text" id="exclude_ingredients" name="exclude_ingredients" required>
-        <br>
-        <label for="min_protein">Proteína mínima (g):</label>
-        <input type="number" id="min_protein" name="min_protein" required>
-        <label for="max_protein">Proteína máxima (g):</label>
-        <input type="number" id="max_protein" name="max_protein" required>
-        <br>
-        <label for="min_carbs">Carbohidratos mínimos (g):</label>
-        <input type="number" id="min_carbs" name="min_carbs" required>
-        <label for="max_carbs">Carbohidratos máximos (g):</label>
-        <input type="number" id="max_carbs" name="max_carbs" required>
-        <br>
-        <label for="min_cal">Calorías mínimas (g):</label>
-        <input type="number" id="min_cal" name="min_cal" required>
-        <label for="max_cal">Calorías máximas (g):</label>
-        <input type="number" id="max_cal" name="max_cal" required>
-        <br>
-        <label for="min_sugar">Azúcar mínima (g):</label>
-        <input type="number" id="min_sugar" name="min_sugar" required>
-        <label for="max_sugar">Azúcar máxima (g):</label>
-        <input type="number" id="max_sugar" name="max_sugar" required>
-        <br>
-        <button type="submit">Enviar</button>
+    <main class="form-container">
+        <!-- Tarjeta Rectangular Horizontal -->
+        <div class="card-horizontal">
+            <div class="form-header-title">
+                <h2>Configura tus Preferencias</h2>
+                <p>Ingresa tus requerimientos para calcular tu plan semanal personalizado.</p>
+            </div>
 
-    </form>
+            <form id="myform" method="get" action="{% url 'plan_semanal' %}">
+                
+                <!-- Sección 1: Filtros de Dieta e Ingredientes -->
+                <div class="form-grid-section">
+                    <div class="field-group full-width">
+                        <label for="diet">Tipo de Dieta:</label>
+                        <select id="diet" name="diet" required>
+                            <option value="" disabled selected>Selecciona una opción...</option>
+                            <option value="Vegetariana">Vegetariana</option>
+                            <option value="Vegana">Vegana</option>
+                            <option value="Omnivora">Omnívora</option>
+                            <option value="Gluten Free">Sin Gluten</option>
+                            <option value="Ketogenic">Keto</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="intolerances">Intolerancias:</label>
+                        <input type="text" id="intolerances" name="intolerances" placeholder="Ej. Lácteos, Maní" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="include_ingredients">Ingredientes a incluir:</label>
+                        <input type="text" id="include_ingredients" name="include_ingredients" placeholder="Ej. Pollo, Palta" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="exclude_ingredients">Ingredientes a excluir:</label>
+                        <input type="text" id="exclude_ingredients" name="exclude_ingredients" placeholder="Ej. Cebolla, Tomate" required>
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Sección 2: Macros y Nutrientes (Grid de 4 columnas compactas) -->
+                <div class="form-grid-macros">
+                    <div class="field-group">
+                        <label for="min_protein">Proteína mín. (g):</label>
+                        <input type="number" id="min_protein" name="min_protein" placeholder="0" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="max_protein">Proteína máx. (g):</label>
+                        <input type="number" id="max_protein" name="max_protein" placeholder="100" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="min_carbs">Carbohidratos mín. (g):</label>
+                        <input type="number" id="min_carbs" name="min_carbs" placeholder="0" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="max_carbs">Carbohidratos máx. (g):</label>
+                        <input type="number" id="max_carbs" name="max_carbs" placeholder="100" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="min_cal">Calorías mín. (kcal):</label>
+                        <input type="number" id="min_cal" name="min_cal" placeholder="100" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="max_cal">Calorías máx. (kcal):</label>
+                        <input type="number" id="max_cal" name="max_cal" placeholder="800" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="min_sugar">Azúcar mín. (g):</label>
+                        <input type="number" id="min_sugar" name="min_sugar" placeholder="0" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="max_sugar">Azúcar máx. (g):</label>
+                        <input type="number" id="max_sugar" name="max_sugar" placeholder="50" required>
+                    </div>
+                </div>
+
+                <!-- Botón de Envío Centrado -->
+                <div class="btn-submit-container">
+                    <button type="submit" class="btn-piscina-submit">Busca tus recetas perfectas</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
 </body>
 </html>
