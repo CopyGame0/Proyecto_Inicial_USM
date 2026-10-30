@@ -1,4 +1,4 @@
-"""URLs mínimas SOLO para los tests (así no dependen de la app 'inicio')."""
+#No se como funcionan los Test, asi que no voy a tocar eso XD
 from django.http import HttpResponse
 from django.urls import include, path
 
