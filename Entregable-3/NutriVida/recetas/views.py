@@ -5,10 +5,10 @@ from .services import TOTAL_RECETAS, ErrorPlan, generar_plan, obtener_receta
 
 def plan_semanal(request):
     """
-    Recibe los datos del formulario por la URL (GET), consulta Spoonacular
-    y muestra el plan. No se guarda nada en la base de datos.
+    Recibe datos del formulario por la URL (GET), consulta a la API de Spoonacular con estos datos
+    y muestra el plan. No se guarda nada en la base de datos de momento, pq aun no implementamos usuarios.
 
-    - Si la URL trae parcial=1 (lo envía el JavaScript del formulario),
+    - Si la URL trae parcial=1 (En caso de no econtrar suficientes recetas. Lo envía el JavaScript del formulario),
       se devuelve solo el pedazo con las tarjetas.
     - Si no, se devuelve la página completa: 1 receta por día en el plan
       y el resto de las recetas en "Otras recetas".
@@ -37,13 +37,14 @@ def plan_semanal(request):
 
 def detalle_receta(request, receta_id):
     """
-    Devuelve SOLO el pedazo de HTML con una receta completa (ingredientes
-    y pasos, ya en español). El JavaScript lo pega dentro de la ventana
-    emergente de la página.
+    Devuelve el pedazo de HTML con una receta completa (ingredientes y pasos, ya en español).
+    El JavaScript lo pega dentro de la ventana emergente de la página.
     """
+    
     contexto = {"receta": None, "error": None}
     try:
         contexto["receta"] = obtener_receta(receta_id)
+        #Esto da error en el VS code y tampoco se pq; supongo que es pq es de una funcion externa al archivo IDK. Funciona y eso es lo importante.
     except ErrorPlan as e:
-        contexto["error"] = str(e)
+        contexto["error"] = str(e)                     
     return render(request, "recetas/_detalle.html", contexto)

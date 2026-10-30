@@ -1,3 +1,4 @@
+#No se como funcionan los Test, asi que no voy a tocar eso XD, seria bastante util para no gastar la API TBH.
 from unittest.mock import MagicMock, patch
 
 from django.test import SimpleTestCase, override_settings

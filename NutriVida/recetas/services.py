@@ -1,9 +1,5 @@
 """
-Toda la lógica que habla con la API de Spoonacular vive aquí.
-
-La idea es que views.py no sepa NADA de la API: solo pide "dame un plan"
-y recibe datos listos para mostrar. Así, si mañana cambian de API,
-solo se toca este archivo.
+Este archivo contiene la logia que habla con la API, otra apps llaman a esta con los parametros nesesarios y aqui se preparan para hacer un GET
 """
 import unicodedata
 from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
@@ -21,17 +17,18 @@ def _traducir_ingredientes(lista):
 
 URL_BUSQUEDA = "https://api.spoonacular.com/recipes/complexSearch"
 
-DIAS_DEL_PLAN = 5          # el README dice "máximo 5 días"
+#Variables de cantidad de recetas
+DIAS_DEL_PLAN = 5         
 COMIDAS_POR_DIA = 3
 TOTAL_RECETAS = DIAS_DEL_PLAN * COMIDAS_POR_DIA
 
-# ---------------------------------------------------------------------------
-# Traducciones español -> valores que entiende Spoonacular (solo acepta inglés)
-# ---------------------------------------------------------------------------
+
+
+# Traducciones a valores que entiende Spoonacular (solo acepta inglés) atravez de diccionarios.
 DIETAS = {
     "vegetariana": "vegetarian",
     "vegana": "vegan",
-    "omnivora": "",          # "" = sin restricción de dieta
+    "omnivora": "",    
     "vegetarian": "vegetarian",
     "vegan": "vegan",
 }
@@ -72,7 +69,7 @@ class ErrorPlan(Exception):
 
 
 def _normalizar(texto):
-    """'Omnívora ' -> 'omnivora' (minúsculas, sin tildes, sin espacios)."""
+    #Normalioza el texto, quita mayusculas, tildes y espacios.
     texto = unicodedata.normalize("NFD", texto.strip().lower())
     return "".join(c for c in texto if unicodedata.category(c) != "Mn")
 
@@ -83,8 +80,8 @@ def _lista_separada_por_comas(texto):
 
 def construir_parametros(datos):
     """
-    Convierte lo que llegó del formulario (request.GET) en los parámetros
-    de Spoonacular. Lanza ErrorPlan si algo viene mal escrito.
+    Transforma lo que llegó del formulario (request.GET) en los parámetros
+    de Spoonacular. Lanza ErrorPlan si algo esta mal escrito.
     """
     params = {}
 
@@ -95,7 +92,7 @@ def construir_parametros(datos):
     if DIETAS.get(dieta):
         params["diet"] = DIETAS[dieta]
 
-    # --- intolerancias (se traducen una por una) ------------------------
+    # intolerancias (se traducen una por una)
     traducidas = []
     for item in _lista_separada_por_comas(datos.get("intolerances", "")):
         clave = _normalizar(item)
@@ -103,7 +100,7 @@ def construir_parametros(datos):
     if traducidas:
         params["intolerances"] = ",".join(traducidas)
 
-    # --- ingredientes (Spoonacular los entiende en inglés) -------------- 
+    #  ingredientes  (se traducen una por una) 
     incluir = _traducir_ingredientes(_lista_separada_por_comas(datos.get("include_ingredients", "")))
     excluir = _traducir_ingredientes(_lista_separada_por_comas(datos.get("exclude_ingredients", "")))
     
@@ -112,7 +109,7 @@ def construir_parametros(datos):
     if excluir:
         params["excludeIngredients"] = ",".join(excluir)
 
-    # --- números --------------------------------------------------------
+    #  números 
     valores = {}
     for campo, parametro in CAMPOS_NUMERICOS:
         bruto = datos.get(campo, "").strip()
@@ -137,7 +134,7 @@ def construir_parametros(datos):
 
 
 def buscar_recetas(params):
-    """Llama a Spoonacular y devuelve la lista cruda de recetas."""
+    #Llama a Spoonacular y devuelve la lista cruda de recetas.
     clave = getattr(settings, "SPOONACULAR_API_KEY", "")
     if not clave:
         raise ErrorPlan("Falta configurar la clave de Spoonacular (SPOONACULAR_API_KEY).")
@@ -146,7 +143,7 @@ def buscar_recetas(params):
     consulta.update({
         "apiKey": clave,
         "number": TOTAL_RECETAS,
-        "sort": "random",              # así cada consulta da un plan distinto
+        "sort": "random",              # da planes random, ningun orden de sorting necesario
         "addRecipeInformation": "true",
         "addRecipeNutrition": "true",  # trae calorías, proteínas, etc.
     })
@@ -167,7 +164,7 @@ def buscar_recetas(params):
 
 
 def _nutriente(receta, nombre):
-    """Busca un nutriente (Calories, Protein...) dentro de la receta."""
+    #Busca un nutriente (Calories, Protein...) dentro de la receta.
     for n in receta.get("nutrition", {}).get("nutrients", []):
         if n.get("name") == nombre:
             return round(n.get("amount", 0))
@@ -175,7 +172,7 @@ def _nutriente(receta, nombre):
 
 
 def simplificar(receta):
-    """Deja solo los datos que la plantilla necesita."""
+    #Deja solo los datos que la plantilla necesita.
     return {
         "id": receta.get("id"),
         "titulo": receta.get("title", "Sin título"),
@@ -193,7 +190,7 @@ def simplificar(receta):
 def armar_plan(recetas):
     """
     Reparte las recetas en días: [{"dia": "Día 1", "comidas": [...]}, ...]
-    Si Spoonacular devuelve menos de 15, se arman menos días.
+    Si Spoonacular devuelve menos de 15, se arman menos días. (Si esto pasa se le informara al usuario)
     """
     recetas = [simplificar(r) for r in recetas]
   
@@ -210,7 +207,7 @@ def armar_plan(recetas):
 
 
 def generar_plan(datos):
-    """Función principal: formulario -> plan semanal listo para mostrar."""
+    #Función principal: de los datos del formulario a un plan semanal.
     params = construir_parametros(datos)
     recetas = buscar_recetas(params)
     return armar_plan(recetas)
@@ -275,7 +272,7 @@ def obtener_receta(receta_id):
         "pasos": traducidos[1 + n:],
     }
 
-    # Si el traductor falló, en_a_es_lista devuelve la MISMA lista de entrada:
+    # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
     # en ese caso no se guarda en caché, para reintentar la próxima vez.
     if traducidos is not originales:
         cache.set(clave_cache, receta, 60 * 60 * 24)
