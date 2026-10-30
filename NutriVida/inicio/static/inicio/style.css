@@ -14,7 +14,7 @@ body {
     flex-direction: column;
 }
 
-/* 2. Header Minimalista */
+/* 2. Header  */
 .header-landing {
     display: flex;
     justify-content: space-between;
@@ -32,7 +32,7 @@ body {
     letter-spacing: -0.5px;
 }
 
-/* 3. Contenedor Centrado */
+/* 3. rectangulo Centrado */
 .landing-container {
     flex: 1;
     display: flex;
@@ -41,7 +41,7 @@ body {
     padding: 30px 20px;
 }
 
-/* 4. Tarjeta Flotante Hero */
+/* 4. Tarjeta flotante */
 .card-hero-minimal {
     background-color: #0E544B;
     border: 1.5px solid #0E544B;

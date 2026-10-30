@@ -1,6 +1,9 @@
 // Abre la receta completa en una ventana emergente, sin salir de la página.
 // Lo usan tanto el formulario como la página /plan/.
 
+
+//entiedno super poco JS pero funciona bien asiq NO SE TOCA ESTO//
+
 const dialogo = document.getElementById("detalle");
 const contenido = document.getElementById("detalle-contenido");
 

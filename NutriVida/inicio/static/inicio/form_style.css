@@ -1,4 +1,4 @@
-/* 1. Reset Base y Helvetica */
+/* 1. base y Helvetica */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
@@ -31,7 +31,7 @@ body {
     color: #0E544B;
 }
 
-/* 3. Contenedor Principal */
+/*  rectangulo principal */
 .form-container {
     flex: 1;
     display: flex;
@@ -40,13 +40,13 @@ body {
     padding: 30px 20px;
 }
 
-/* 4. Tarjeta Rectangular Horizontal Verde */
+/* rectangulo */
 .card-horizontal {
     background-color: #0E544B;
     border-radius: 20px;
     padding: 35px 40px;
     width: 100%;
-    max-width: 950px; /* Ancho extendido para formato horizontal */
+    max-width: 950px; 
     box-shadow: 0 12px 30px rgba(14, 84, 75, 0.2);
     color: #ffffff;
 }
@@ -67,7 +67,6 @@ body {
     color: #e2e8f0;
 }
 
-/* 5. Grids e Inputs Compactos */
 .form-grid-section {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -88,7 +87,7 @@ body {
 
 .form-grid-macros {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 Columnas para compactar */
+    grid-template-columns: repeat(4, 1fr); 
     gap: 12px;
     margin-bottom: 25px;
 }
@@ -108,7 +107,7 @@ body {
 .field-group input,
 .field-group select {
     width: 100%;
-    height: 38px; /* Altura más pequeña y reducida */
+    height: 38px; 
     padding: 0 12px;
     border-radius: 8px;
     border: 1px solid transparent;
@@ -125,7 +124,7 @@ body {
     box-shadow: 0 0 0 2px rgba(165, 145, 50, 0.3);
 }
 
-/* 6. Botón de Envío Píldora */
+/* boton enviar */
 .btn-submit-container {
     text-align: center;
     margin-top: 10px;
