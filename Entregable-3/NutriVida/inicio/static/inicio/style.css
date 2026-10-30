@@ -1,0 +1,98 @@
+/* 1. Reset Global y Tipografía Helvetica */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+body {
+    background-color: #f8faf9;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Header  */
+.header-landing {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 75px;
+    padding: 0 45px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.header-landing h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0E544B;
+    letter-spacing: -0.5px;
+}
+
+/* 3. rectangulo Centrado */
+.landing-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+/* 4. Tarjeta flotante */
+.card-hero-minimal {
+    background-color: #0E544B;
+    border: 1.5px solid #0E544B;
+    border-radius: 24px;
+    padding: 50px 45px;
+    max-width: 540px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 35px rgba(14, 84, 75, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hero-minimal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(14, 84, 75, 0.12);
+}
+
+.card-hero-minimal h2 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 14px;
+    line-height: 1.25;
+}
+
+.card-hero-minimal p {
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.55;
+    margin-bottom: 32px;
+}
+
+
+/*boton comenzar mi busquesa   */
+
+.btn-glow-wrapper{
+    display: inline-block;
+}
+
+.btn-hero-action{
+    display: block;
+    padding: 14px 40px;
+    border-radius: 50px;
+    background: linear-gradient(to right, #A59132, #1d6f64);
+    color: #FDFFFC;
+    font-size: 1rem;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.btn-hero-action:hover{
+    transform: scale(1.03);
+    filter: brightness(1.08);
+}   

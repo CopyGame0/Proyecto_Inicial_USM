@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriVida - Planificación Semanal</title>
+    
+    <!-- Vinculación del CSS de la landing -->
+    <link rel="stylesheet" href="{% static 'inicio/style.css' %}?v=3.0">
+</head>
+<body>
+
+    <!-- Header minimalista -->
+    <header class="header-landing">
+        <div class="logo">
+            <h1>NutriVida</h1>
+        </div>
+    </header>
+
+    <!-- Contenido Principal: Tarjeta Flotante Única -->
+    <main class="landing-container">
+        <div class="card-hero-minimal">
+            <h2>Encuentra tu receta perfecta</h2>
+            <p>Genera un menú semanal adaptado a tus necesidades, calorías y preferencias en cuestión de segundos.</p>
+            
+            <div class="btn-glow-wrapper">
+                <a href="{% url 'formulario' %}" class="btn-hero-action">
+                    Comenzar mi busqueda
+                </a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

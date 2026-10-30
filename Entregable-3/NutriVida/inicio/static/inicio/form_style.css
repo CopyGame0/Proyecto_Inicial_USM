@@ -1,0 +1,150 @@
+/* 1. base y Helvetica */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+body {
+    background-color: #f8faf9;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. Header */
+.header-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    padding: 0 45px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.header-form h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #0E544B;
+}
+
+/*  rectangulo principal */
+.form-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+/* rectangulo */
+.card-horizontal {
+    background-color: #0E544B;
+    border-radius: 20px;
+    padding: 35px 40px;
+    width: 100%;
+    max-width: 950px; 
+    box-shadow: 0 12px 30px rgba(14, 84, 75, 0.2);
+    color: #ffffff;
+}
+
+.form-header-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.form-header-title p {
+    font-size: 0.9rem;
+    color: #e2e8f0;
+}
+
+.form-grid-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.field-group.full-width {
+    grid-column: span 2;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 20px 0;
+}
+
+.form-grid-macros {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.field-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #FDFFFC;
+    margin-bottom: 4px;
+}
+
+.field-group input,
+.field-group select {
+    width: 100%;
+    height: 38px; 
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+    border-color: #A59132;
+    box-shadow: 0 0 0 2px rgba(165, 145, 50, 0.3);
+}
+
+/* boton enviar */
+.btn-submit-container {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-piscina-submit {
+    background-color: #ffffff;
+    color: #0E544B;
+    border: none;
+    padding: 12px 35px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: all 0.25s ease;
+}
+
+.btn-piscina-submit:hover {
+    background-color: #f8faf9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
