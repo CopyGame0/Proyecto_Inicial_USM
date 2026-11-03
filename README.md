@@ -10,7 +10,7 @@ Una aplicación web para ayudar a conseguir recetas en base a una pauta nutricio
 
 ## Funcionalidades planeadas
 -  Búsqueda de recetas saludables adaptadas a las pautas nutricionales de cada usuario. (hecho)
-- Apartado especial para la entrega de recetas equilibradas aptas para niños, como postres o recetas entretenidas para fomentar el consumo de alimentos saludables.
+- ~~Apartado especial para la entrega de recetas equilibradas aptas para niños, como postres o recetas entretenidas para fomentar el consumo de alimentos saludables.~~ (Descartado)
 - Una lista de recetas para un máximo de 5 días. (Hecho)
 
 ------------
