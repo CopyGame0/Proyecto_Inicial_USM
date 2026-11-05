@@ -272,6 +272,13 @@ def obtener_receta(receta_id):
         "pasos": traducidos[1 + n:],
     }
 
+    #lista de links. Agregar mas links :v
+    links = {}
+    for ingrediente in receta[ingredientes]:
+        links[ingrediente] = {"google" : f"http://www.google.com/search?q={ingrediente}&tbm=shop"}
+    receta["links"] = links
+    
+
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
     # en ese caso no se guarda en caché, para reintentar la próxima vez.
     if traducidos is not originales:
