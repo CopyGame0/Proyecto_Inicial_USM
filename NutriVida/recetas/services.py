@@ -261,16 +261,22 @@ def obtener_receta(receta_id):
     ingredientes = [i["original"] for i in datos.get("extendedIngredients", []) if i.get("original")]
     pasos = []
     for bloque in datos.get("analyzedInstructions", []):
-        pasos += [p["step"] for p in bloque.get("steps", []) if p.get("step")]
+        for p in bloque.get("steps", []):
+            if p.get("step"):
+                pasos.append(p["step"])
 
     # Un solo viaje al traductor: título + ingredientes + pasos
     originales = [titulo] + ingredientes + pasos
+    
     traducidos = en_a_es_lista(originales)
     n = len(ingredientes)
+    titulo_traducido = traducidos[0]
+    pasos_traducidos = traducidos[1 + n:]
+    ingredientes_traducidos = traducidos[1:1 + n]
     #Listas con los links de compra 
 
     ingredientes_procesados = []
-    for ing in traducidos[1:1 + n]:
+    for ing in ingredientes_traducidos:
         # crea cada link de cada ingrediente 
         link_jumbo = generar_link_jumbo(ing)
         ingredientes_procesados.append({"nombre":ing,
@@ -278,13 +284,13 @@ def obtener_receta(receta_id):
 
     receta = {
         "id": receta_id,
-        "titulo": traducidos[0],
+        "titulo": titulo_traducido,
         "imagen": datos.get("image", ""),
         "minutos": datos.get("readyInMinutes"),
         "porciones": datos.get("servings"),
         "url": datos.get("sourceUrl", ""),
         "ingredientes": ingredientes_procesados,
-        "pasos": traducidos[1 + n:],
+        "pasos": pasos_traducidos,
     }
 
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
