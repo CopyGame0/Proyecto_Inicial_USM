@@ -1,9 +1,7 @@
-{# una receta completa, sin html, head ni body: se carga dentro de la ventana emergente #}
 {% if error %}
     <p class="mensaje-error">{{ error }}</p>
 {% else %}
     <article class="detalle">
-        <!-- lado izquierdo: texto -->
         <div class="detalle-texto">
             <h2>{{ receta.titulo }}</h2>
 
@@ -12,8 +10,17 @@
                 {% if receta.porciones %}<span>Porciones: {{ receta.porciones }}</span>{% endif %}
             </p>
 
-            <h3>Ingredientes</h3>
-            {% if receta.ingredientes %}
+            <h3>Ingredientes y dónde conseguirlos</h3>
+            {% if receta.compra_ingredientes %}
+                <ul>
+                    {% for ing in receta.compra_ingredientes %}
+                        <li>
+                            {{ ing.nombre }}
+                            - <a href="{{ ing.url_supermercado }}" target="_blank" rel="noopener">Buscar tienda</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% elif receta.ingredientes %}
                 <ul>
                     {% for ingrediente in receta.ingredientes %}
                         <li>{{ ingrediente }}</li>
@@ -34,15 +41,14 @@
                 <p>Esta receta no trae instrucciones paso a paso.</p>
             {% endif %}
 
-            <p class="detalle-fuente">
-                Traducción automática. Datos de <a href="https://spoonacular.com/food-api" target="_blank" rel="noopener">spoonacular</a>.
+            <div class="detalle-fuente">
+                *Traducción automática. Datos de <a href="https://spoonacular.com/food-api" target="_blank" rel="noopener">spoonacular</a>
                 {% if receta.url %}
-                    <a href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta original (en inglés)</a>
+                    | <a href="{{ receta.url }}" target="_blank" rel="noopener">Ver receta original (en inglés)</a>
                 {% endif %}
-            </p>
+            </div>
         </div>
 
-        <!-- lado derecho: imagen -->
         {% if receta.imagen %}
             <div class="detalle-imagen">
                 <img src="{{ receta.imagen }}" alt="{{ receta.titulo }}">

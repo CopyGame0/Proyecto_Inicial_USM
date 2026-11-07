@@ -34,23 +34,16 @@ def plan_semanal(request):
     for dia in contexto["plan"]:
         for receta in dia.get("comidas", []):
             if "ingredientes" in receta and isinstance(receta["ingredientes"], list):
-               
-                lista_compra = []
-                
-                for ing in receta["ingredientes"]:
-        
-                    item_ingrediente = {
+                receta["compra_ingredientes"] = [
+                    {
                         "nombre": ing,
                         "url_supermercado": f"https://www.google.com/search?q={urllib.parse.quote(ing + ' comprar supermercado')}"
                     }
-                  
-                    lista_compra.append(item_ingrediente)
-                
-               
-                receta["compra_ingredientes"] = lista_compra
+                    for ing in receta["ingredientes"]
+                ]
 
-        plantilla = "recetas/_plan.html" if es_parcial else "recetas/plan.html"
-        return render(request, plantilla, contexto)
+    plantilla = "recetas/_plan.html" if es_parcial else "recetas/plan.html"
+    return render(request, plantilla, contexto)
 
 
 def detalle_receta(request, receta_id):

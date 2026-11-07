@@ -1,11 +1,10 @@
-{# tarjetas del plan, sin html, head ni body: se usa en plan.html y en el formulario #}
 {% if error %}
     <p class="mensaje-error">{{ error }}</p>
 {% elif not plan %}
-    <p class="mensaje-error">No encontramos recetas con esas condiciones. Pruebe con rangos más amplios.</p>
+    <p class="mensaje-error">No encontramos recetas con esas condiciones.</p>
 {% else %}
     {% if total < maximo %}
-        <p class="aviso">Solo encontramos {{ total }} de {{ maximo }} recetas con esos filtros, por eso el plan tiene menos comidas. Pruebe con menos ingredientes o rangos más amplios.</p>
+        <p class="aviso">Solo encontramos {{ total }} de {{ maximo }} recetas.</p>
     {% endif %}
 
     {% for dia in plan %}
@@ -19,11 +18,23 @@
                         {% endif %}
                         <h3>{{ receta.titulo }}</h3>
                         <ul>
-                            {% if receta.calorias is not None %}<li>Calorías: {{ receta.calorias }} kcal</li>{% endif %}
-                            {% if receta.proteina is not None %}<li>Proteína: {{ receta.proteina }} g</li>{% endif %}
-                            {% if receta.carbohidratos is not None %}<li>Carbohidratos: {{ receta.carbohidratos }} g</li>{% endif %}
-                            {% if receta.azucar is not None %}<li>Azúcar: {{ receta.azucar }} g</li>{% endif %}
+                            {% if receta.calories %}<li>Calorías: {{ receta.calorias }} kcal</li>{% endif %}
+                            {% if receta.proteina %}<li>Proteína: {{ receta.proteina }} g</li>{% endif %}
                         </ul>
+
+                        {% if receta.compra_ingredientes %}
+                            <div class="seccion-ingredientes-compra">
+                                <h4>Conseguir ingredientes:</h4>
+                                <ul>
+                                    {% for ing in receta.compra_ingredientes %}
+                                        <li>
+                                            <a href="{{ ing.url_supermercado }}" target="_blank" rel="noopener">{{ ing.nombre }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
                         {% if receta.id %}
                             <button type="button" class="ver-receta" data-url="{% url 'detalle_receta' receta.id %}">Ver receta</button>
                         {% endif %}
