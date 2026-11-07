@@ -7,6 +7,13 @@ import requests
 from django.conf import settings
 from django.core.cache import cache
 
+import urllib.parse
+
+#buscador para compra de ingredientes 
+def generar_link_jumbo(ingrediente):
+    ingrediente_seguro = urllib.parse.quote(ingrediente)
+    return f"https://www.jumbo.cl/busqueda?ft={ingrediente_seguro}"
+
 #funcion para traducir, usaremos esto mas tarde
 def _traducir_ingredientes(lista):
     try:
@@ -260,6 +267,14 @@ def obtener_receta(receta_id):
     originales = [titulo] + ingredientes + pasos
     traducidos = en_a_es_lista(originales)
     n = len(ingredientes)
+    #Listas con los links de compra 
+
+    ingredientes_procesados = []
+    for ing in traducidos[1:1 + n]:
+        # crea cada link de cada ingrediente 
+        link_jumbo = generar_link_jumbo(ing)
+        ingredientes_procesados.append({"nombre":ing,
+                                        "url_compra": link_jumbo})
 
     receta = {
         "id": receta_id,
@@ -268,7 +283,7 @@ def obtener_receta(receta_id):
         "minutos": datos.get("readyInMinutes"),
         "porciones": datos.get("servings"),
         "url": datos.get("sourceUrl", ""),
-        "ingredientes": traducidos[1:1 + n],
+        "ingredientes": ingredientes_procesados,
         "pasos": traducidos[1 + n:],
     }
 
