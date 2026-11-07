@@ -1,18 +1,8 @@
+import urllib.parse
 from django.shortcuts import render
-
 from .services import TOTAL_RECETAS, ErrorPlan, generar_plan, obtener_receta
 
-
 def plan_semanal(request):
-    """
-    Recibe datos del formulario por la URL (GET), consulta a la API de Spoonacular con estos datos
-    y muestra el plan. No se guarda nada en la base de datos de momento, pq aun no implementamos usuarios.
-
-    - Si la URL trae parcial=1 (En caso de no econtrar suficientes recetas. Lo envía el JavaScript del formulario),
-      se devuelve solo el pedazo con las tarjetas.
-    - Si no, se devuelve la página completa: 1 receta por día en el plan
-      y el resto de las recetas en "Otras recetas".
-    """
     contexto = {"plan": [], "otras_recetas": [], "error": None, "total": 0, "maximo": TOTAL_RECETAS}
     try:
         contexto["plan"] = generar_plan(request.GET)
@@ -31,20 +21,52 @@ def plan_semanal(request):
         contexto["plan"] = plan_corto
         contexto["otras_recetas"] = otras
 
-    plantilla = "recetas/_plan.html" if es_parcial else "recetas/plan.html"
-    return render(request, plantilla, contexto)
+    for receta in contexto["otras_recetas"]:
+        if "ingredientes" in receta and isinstance(receta["ingredientes"], list):
+            receta["compra_ingredientes"] = [
+                {
+                    "nombre": ing,
+                    "url_supermercado": f"https://www.google.com/search?q={urllib.parse.quote(ing + ' comprar supermercado')}"
+                }
+                for ing in receta["ingredientes"]
+            ]
+    
+    for dia in contexto["plan"]:
+        for receta in dia.get("comidas", []):
+            if "ingredientes" in receta and isinstance(receta["ingredientes"], list):
+               
+                lista_compra = []
+                
+                for ing in receta["ingredientes"]:
+        
+                    item_ingrediente = {
+                        "nombre": ing,
+                        "url_supermercado": f"https://www.google.com/search?q={urllib.parse.quote(ing + ' comprar supermercado')}"
+                    }
+                  
+                    lista_compra.append(item_ingrediente)
+                
+               
+                receta["compra_ingredientes"] = lista_compra
+
+        plantilla = "recetas/_plan.html" if es_parcial else "recetas/plan.html"
+        return render(request, plantilla, contexto)
 
 
 def detalle_receta(request, receta_id):
-    """
-    Devuelve el pedazo de HTML con una receta completa (ingredientes y pasos, ya en español).
-    El JavaScript lo pega dentro de la ventana emergente de la página.
-    """
-    
     contexto = {"receta": None, "error": None}
     try:
-        contexto["receta"] = obtener_receta(receta_id)
-        #Esto da error en el VS code y tampoco se pq; supongo que es pq es de una funcion externa al archivo IDK. Funciona y eso es lo importante.
+        receta = obtener_receta(receta_id)
+        if receta and "ingredientes" in receta and isinstance(receta["ingredientes"], list):
+            receta["compra_ingredientes"] = [
+                {
+                    "nombre": ing,
+                    "url_supermercado": f"https://www.google.com/search?q={urllib.parse.quote(ing + ' comprar supermercado')}"
+                }
+                for ing in receta["ingredientes"]
+            ]
+        contexto["receta"] = receta
     except ErrorPlan as e:
-        contexto["error"] = str(e)                     
+        contexto["error"] = str(e)
+
     return render(request, "recetas/_detalle.html", contexto)
