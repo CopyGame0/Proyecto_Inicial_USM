@@ -16,7 +16,8 @@
             {% if receta.ingredientes %}
                 <ul>
                     {% for ingrediente in receta.ingredientes %}
-                        <li>{{ ingrediente }}</li>
+                    <!--Ejemplo de como acceder a los links de las recetas-->
+                        <li>{{ ingrediente.nombre }} – <a href="{{ ingrediente.url_compra.Jumbo }}" target="_blank" rel="noopener">Buscar en Jumbo</a></li>
                     {% endfor %}
                 </ul>
             {% else %}

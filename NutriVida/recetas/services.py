@@ -6,6 +6,11 @@ from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
 import requests
 from django.conf import settings
 from django.core.cache import cache
+import re
+
+import urllib.parse
+
+
 
 #funcion para traducir, usaremos esto mas tarde
 def _traducir_ingredientes(lista):
@@ -215,6 +220,16 @@ def generar_plan(datos):
 
 URL_DETALLE = "https://api.spoonacular.com/recipes/{id}/information"
 
+#buscador para compra de ingredientes 
+def generar_links(ingrediente):
+   
+    ingrediente_seguro = urllib.parse.quote(ingrediente)
+    links = {"Jumbo" : f"https://www.jumbo.cl/busqueda?ft={ingrediente_seguro}",
+             "Google": f"https://www.google.com/search?q={ingrediente_seguro}&udm=28",
+             "Unimarc": f"https://www.unimarc.cl/search?q={ingrediente_seguro}",
+             "Santa Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
+    #print(links["Unimarc"])
+    return links
 
 def obtener_receta(receta_id):
     """
@@ -251,25 +266,54 @@ def obtener_receta(receta_id):
 
     datos = respuesta.json()
     titulo = datos.get("title", "Sin título")
-    ingredientes = [i["original"] for i in datos.get("extendedIngredients", []) if i.get("original")]
+    ingredientes = []
+    for i in datos.get("extendedIngredients", []):
+        if i.get("original"):
+            ingredientes.append(i["original"])
+            
     pasos = []
     for bloque in datos.get("analyzedInstructions", []):
-        pasos += [p["step"] for p in bloque.get("steps", []) if p.get("step")]
+        for p in bloque.get("steps", []):
+            if p.get("step"):
+                pasos.append(p["step"])
 
     # Un solo viaje al traductor: título + ingredientes + pasos
     originales = [titulo] + ingredientes + pasos
+    
     traducidos = en_a_es_lista(originales)
     n = len(ingredientes)
+    titulo_traducido = traducidos[0]
+    
+    #separamos los pasos, ya que aveces vienen juntos desde Spoonacular
+    pasos_traducidos = []
+    for paso in traducidos[1 + n:]:
+        # Usamos la libreria "Regular expression operations", para separar despues de un punto, exclamaciono o pregunta. 
+        # Solo si viene depues uma mayuscula, exclamaciono o pregunta.
+        separacion = re.split(r'(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])', paso.strip())
+        for paso_individual in separacion:
+            paso_individual = paso_individual.strip()
+            if paso_individual:
+                pasos_traducidos.append(paso_individual)
+        
+    ingredientes_traducidos = traducidos[1:1 + n]
+    #Listas con los links de compra 
+
+    ingredientes_procesados = []
+    for ing in ingredientes_traducidos:
+        # crea cada link de cada ingrediente 
+        links_recetas = generar_links(ing)
+        ingredientes_procesados.append({"nombre":ing,
+                                        "url_compra": links_recetas})
 
     receta = {
         "id": receta_id,
-        "titulo": traducidos[0],
+        "titulo": titulo_traducido,
         "imagen": datos.get("image", ""),
         "minutos": datos.get("readyInMinutes"),
         "porciones": datos.get("servings"),
         "url": datos.get("sourceUrl", ""),
-        "ingredientes": traducidos[1:1 + n],
-        "pasos": traducidos[1 + n:],
+        "ingredientes": ingredientes_procesados,
+        "pasos": pasos_traducidos,
     }
 
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
