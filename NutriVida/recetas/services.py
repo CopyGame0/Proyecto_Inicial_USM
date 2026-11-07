@@ -170,9 +170,11 @@ def buscar_recetas(params):
 
 def _nutriente(receta, nombre):
     #Busca un nutriente (Calories, Protein...) dentro de la receta.
+    
     for n in receta.get("nutrition", {}).get("nutrients", []):
         if n.get("name") == nombre:
             return round(n.get("amount", 0))
+        
     return None
 
 
@@ -197,9 +199,17 @@ def armar_plan(recetas):
     Reparte las recetas en días: [{"dia": "Día 1", "comidas": [...]}, ...]
     Si Spoonacular devuelve menos de 15, se arman menos días. (Si esto pasa se le informara al usuario)
     """
-    recetas = [simplificar(r) for r in recetas]
-  
-    titulos = en_a_es_lista([r["titulo"] for r in recetas])
+    
+    recetas_simplificadas = []
+    for r in recetas:
+        recetas_simplificadas.append(simplificar(r))
+    recetas = recetas_simplificadas
+
+    titulos_temporales = []
+    for r in recetas:
+        titulos_temporales.append(r["titulo"])
+    titulos = en_a_es_lista(titulos_temporales)
+    
     for receta, titulo in zip(recetas, titulos):
         receta["titulo"] = titulo
     
