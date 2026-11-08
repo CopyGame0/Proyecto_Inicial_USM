@@ -9,6 +9,7 @@ from django.core.cache import cache
 import re
 
 import urllib.parse
+from .datos_demo import plan_demo, receta_demo
 
 
 
@@ -22,12 +23,7 @@ def _traducir_ingredientes(lista):
 
 URL_BUSQUEDA = "https://api.spoonacular.com/recipes/complexSearch"
 
-#Variables de cantidad de recetas
-DIAS_DEL_PLAN = 5         
-COMIDAS_POR_DIA = 3
-TOTAL_RECETAS = DIAS_DEL_PLAN * COMIDAS_POR_DIA
-
-
+TOTAL_RECETAS = settings.DIAS_DEL_PLAN + settings.COMIDAS_POR_DIA
 
 # Traducciones a valores que entiende Spoonacular (solo acepta inglés) atravez de diccionarios.
 DIETAS = {
@@ -170,9 +166,11 @@ def buscar_recetas(params):
 
 def _nutriente(receta, nombre):
     #Busca un nutriente (Calories, Protein...) dentro de la receta.
+    
     for n in receta.get("nutrition", {}).get("nutrients", []):
         if n.get("name") == nombre:
             return round(n.get("amount", 0))
+        
     return None
 
 
@@ -197,15 +195,23 @@ def armar_plan(recetas):
     Reparte las recetas en días: [{"dia": "Día 1", "comidas": [...]}, ...]
     Si Spoonacular devuelve menos de 15, se arman menos días. (Si esto pasa se le informara al usuario)
     """
-    recetas = [simplificar(r) for r in recetas]
-  
-    titulos = en_a_es_lista([r["titulo"] for r in recetas])
+    
+    recetas_simplificadas = []
+    for r in recetas:
+        recetas_simplificadas.append(simplificar(r))
+    recetas = recetas_simplificadas
+
+    titulos_temporales = []
+    for r in recetas:
+        titulos_temporales.append(r["titulo"])
+    titulos = en_a_es_lista(titulos_temporales)
+    
     for receta, titulo in zip(recetas, titulos):
         receta["titulo"] = titulo
     
     plan = []
-    for i in range(DIAS_DEL_PLAN):
-        comidas = recetas[i * COMIDAS_POR_DIA:(i + 1) * COMIDAS_POR_DIA]
+    for i in range(settings.DIAS_DEL_PLAN):
+        comidas = recetas[i * settings.COMIDAS_POR_DIA:(i + 1) * settings.COMIDAS_POR_DIA]
         if comidas:
             plan.append({"dia": f"Día {i + 1}", "comidas": comidas})
     return plan
@@ -213,6 +219,10 @@ def armar_plan(recetas):
 
 def generar_plan(datos):
     #Función principal: de los datos del formulario a un plan semanal.
+    
+    if settings.MODO_DEMO: #si no queremos Gastar API
+        return plan_demo()
+    
     params = construir_parametros(datos)
     recetas = buscar_recetas(params)
     return armar_plan(recetas)
@@ -237,6 +247,10 @@ def obtener_receta(receta_id):
     Se guarda en caché 24 h: si otro usuario abre la misma receta, no se
     gasta ni la API de Spoonacular ni el traductor.
     """
+    
+    if settings.MODO_DEMO:
+        return receta_demo(receta_id)
+    
     clave_cache = f"receta_{receta_id}"
     guardada = cache.get(clave_cache)
     if guardada:
