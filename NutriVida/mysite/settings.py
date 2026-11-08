@@ -26,11 +26,21 @@ SECRET_KEY = 'django-insecure-!#vvt^y%5v^qhro8bt+gkycio&irs$98@vwhhz3j^j=k9q429e
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#cargar API keys
 load_dotenv()
 SPOONACULAR_API_KEY = os.getenv('SPOONACULAR_API_KEY')
 DEEPL_API_KEY = os.getenv('DEEPL_API_KEY')
 
+#Modo de prueba
+MODO_DEMO = True
+
+#Cantidad de recetas dadas
+DIAS_DEL_PLAN = 5         
+COMIDAS_POR_DIA = 3
+
 ALLOWED_HOSTS = []
+
+
 
 
 # Application definition

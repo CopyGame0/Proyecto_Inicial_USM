@@ -9,6 +9,7 @@ from django.core.cache import cache
 import re
 
 import urllib.parse
+from .datos_demo import plan_demo, receta_demo
 
 
 
@@ -22,12 +23,7 @@ def _traducir_ingredientes(lista):
 
 URL_BUSQUEDA = "https://api.spoonacular.com/recipes/complexSearch"
 
-#Variables de cantidad de recetas
-DIAS_DEL_PLAN = 5         
-COMIDAS_POR_DIA = 3
-TOTAL_RECETAS = DIAS_DEL_PLAN * COMIDAS_POR_DIA
-
-
+TOTAL_RECETAS = settings.DIAS_DEL_PLAN + settings.COMIDAS_POR_DIA
 
 # Traducciones a valores que entiende Spoonacular (solo acepta inglés) atravez de diccionarios.
 DIETAS = {
@@ -214,8 +210,8 @@ def armar_plan(recetas):
         receta["titulo"] = titulo
     
     plan = []
-    for i in range(DIAS_DEL_PLAN):
-        comidas = recetas[i * COMIDAS_POR_DIA:(i + 1) * COMIDAS_POR_DIA]
+    for i in range(settings.DIAS_DEL_PLAN):
+        comidas = recetas[i * settings.COMIDAS_POR_DIA:(i + 1) * settings.COMIDAS_POR_DIA]
         if comidas:
             plan.append({"dia": f"Día {i + 1}", "comidas": comidas})
     return plan
@@ -223,6 +219,10 @@ def armar_plan(recetas):
 
 def generar_plan(datos):
     #Función principal: de los datos del formulario a un plan semanal.
+    
+    if settings.MODO_DEMO: #si no queremos Gastar API
+        return plan_demo()
+    
     params = construir_parametros(datos)
     recetas = buscar_recetas(params)
     return armar_plan(recetas)
@@ -247,6 +247,10 @@ def obtener_receta(receta_id):
     Se guarda en caché 24 h: si otro usuario abre la misma receta, no se
     gasta ni la API de Spoonacular ni el traductor.
     """
+    
+    if settings.MODO_DEMO:
+        return receta_demo(receta_id)
+    
     clave_cache = f"receta_{receta_id}"
     guardada = cache.get(clave_cache)
     if guardada:
