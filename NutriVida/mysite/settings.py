@@ -32,7 +32,7 @@ SPOONACULAR_API_KEY = os.getenv('SPOONACULAR_API_KEY')
 DEEPL_API_KEY = os.getenv('DEEPL_API_KEY')
 
 #Modo de prueba
-MODO_DEMO = True
+MODO_DEMO = False
 
 #Cantidad de recetas dadas
 DIAS_DEL_PLAN = 5         
