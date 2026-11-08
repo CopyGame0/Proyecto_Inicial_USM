@@ -48,3 +48,15 @@ def detalle_receta(request, receta_id):
     except ErrorPlan as e:
         contexto["error"] = str(e)                     
     return render(request, "recetas/_detalle.html", contexto)
+
+def supermercados_receta(request, receta_id):
+    """
+    Carga los datos de la receta y los links de compra
+    para mostrarlos en la página de supermercados.
+    """
+    contexto = {"receta": None, "error": None}
+    try:
+        contexto["receta"] = obtener_receta(receta_id)
+    except ErrorPlan as e:
+        contexto["error"] = str(e)
+    return render(request, "recetas/supermercados.html", contexto)

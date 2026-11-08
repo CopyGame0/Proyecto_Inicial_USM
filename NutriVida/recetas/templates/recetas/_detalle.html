@@ -13,16 +13,25 @@
             </p>
 
             <h3>Ingredientes</h3>
-            {% if receta.ingredientes %}
-                <ul>
-                    {% for ingrediente in receta.ingredientes %}
-                    <!--Ejemplo de como acceder a los links de las recetas-->
-                        <li>{{ ingrediente.nombre }} – <a href="{{ ingrediente.url_compra.Jumbo }}" target="_blank" rel="noopener">Buscar en Jumbo</a></li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No hay lista de ingredientes disponible.</p>
-            {% endif %}
+                {% if receta.ingredientes %}
+                    <ul>
+                        {% for ingrediente in receta.ingredientes %}
+                            <!-- Mostramos el ingrediente -->
+                            <li>{{ ingrediente.nombre|default:ingrediente }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay lista de ingredientes disponible.</p>
+                {% endif %}
+
+                <!-- Botón para ver la lista de compras con los links en nueva pestaña -->
+                {% if receta.id %}
+                    <div style="margin-top: 25px; display: flex; justify-content: flex-start; align-items: center;">
+                        <a href="{% url 'supermercados_receta' receta.id %}" class="btn-supermercados-footer" target="_blank">
+                            🛒 Ver Lista de Compras
+                        </a>
+                    </div>
+                {% endif %}
 
             <h3>Preparación</h3>
             {% if receta.pasos %}

@@ -237,7 +237,7 @@ def generar_links(ingrediente):
     links = {"Jumbo" : f"https://www.jumbo.cl/busqueda?ft={ingrediente_seguro}",
              "Google": f"https://www.google.com/search?q={ingrediente_seguro}&udm=28",
              "Unimarc": f"https://www.unimarc.cl/search?q={ingrediente_seguro}",
-             "Santa Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
+             "Santa_Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
     #print(links["Unimarc"])
     return links
 
@@ -332,10 +332,10 @@ def obtener_receta(receta_id):
 
     #lista de links. Agregar mas links :v
     links = {}
-    for ingrediente in receta[ingredientes]:
-        links[ingrediente] = {"google" : f"http://www.google.com/search?q={ingrediente}&tbm=shop"}
+    for ing in receta["ingredientes"]:
+        nombre_ing = ing.get("nombre", str(ing))
+        links[nombre_ing] = {"google" : f"http://www.google.com/search?q={nombre_ing}&tbm=shop"}
     receta["links"] = links
-    
 
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
     # en ese caso no se guarda en caché, para reintentar la próxima vez.
