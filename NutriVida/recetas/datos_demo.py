@@ -1,6 +1,7 @@
 #Datos de demostracion, para probar la pagina y cambiar el Front-end sin usar las APIs
 from django.conf import settings
 from django.templatetags.static import static
+import urllib.parse
 
 def _receta(i, con_imagen=True):
     return {
@@ -31,13 +32,33 @@ def plan_demo():
   return plan
 
 def receta_demo(receta_id):
+
+    def generar_links(ingrediente):
+   
+      ingrediente_seguro = urllib.parse.quote(ingrediente)
+      links = {"Jumbo" : f"https://www.jumbo.cl/busqueda?ft={ingrediente_seguro}",
+              "Google": f"https://www.google.com/search?q={ingrediente_seguro}&udm=28",
+              "Unimarc": f"https://www.unimarc.cl/search?q={ingrediente_seguro}",
+              "Santa Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
+      return links
+  
+    ingredientes_falsos = ["1 taza de arroz", "2 tomates", "Sal a gusto"]
+    ingredientes_procesados = []
+    for ing in ingredientes_falsos:
+            # crea cada link de cada ingrediente 
+            links_recetas = generar_links(ing)
+            ingredientes_procesados.append({"nombre":ing,
+                                            "url_compra": links_recetas})
+  
     return {
+      
+      
         "id": receta_id,
         "titulo": f"Receta de ejemplo número {receta_id}",
         "imagen": static("recetas/demo.jpg"),
         "minutos": 30,
         "porciones": 4,
         "url": "https://example.com",
-        "ingredientes": ["1 taza de arroz", "2 tomates", "Sal a gusto"],
+        "ingredientes": ingredientes_procesados,
         "pasos": ["Lavar el arroz.", "Cocinar 15 minutos.", "Servir caliente."],
     }
