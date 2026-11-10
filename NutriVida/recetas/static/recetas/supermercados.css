@@ -1,0 +1,94 @@
+body {
+    background-color: #f4f7f6;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Título de la tarjeta con su línea verde */
+.container h1 {
+    color: #0E544B;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #0E544B;
+}
+
+p {
+    color: #666;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    font-size: 0.95rem;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eaeaea;
+}
+
+th, td {
+    padding: 16px 20px;
+    text-align: left;
+}
+
+th {
+    background-color: #0E544B;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+    background-color: #fafbfc;
+}
+
+tr:hover {
+    background-color: #f1f7f6;
+}
+
+td {
+    border-bottom: 1px solid #eaeaea;
+    font-size: 0.95rem;
+}
+
+/* Botones de supermercados */
+.btn-tienda {
+    display: inline-block;
+    padding: 6px 14px;
+    margin: 3px 6px 3px 0;
+    background-color: #e6f0ee;
+    color: #0E544B;
+    border: 1px solid #0E544B;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-tienda:hover {
+    background-color: #0E544B;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(14, 84, 75, 0.2);
+}
+
+/* Hace que la columna de opciones de compra quepan los 3 botones */
+table td:last-child, table th:last-child {
+    width: 280px; 
+    white-space: nowrap;
+}

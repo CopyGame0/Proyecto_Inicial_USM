@@ -1,0 +1,57 @@
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'recetas/plan_style.css' %}">
+    <link rel="stylesheet" href="{% static 'recetas/supermercados.css' %}">
+    <title>Lista de Compras - Supermercados</title>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1 class="nombre-empresa">NutriVida</h1>
+        </div>
+        <div class="menu">
+            <nav>
+                <a href="javascript:void(0);" onclick="window.close()" class="btn-busqueda">Volver a la receta</a>
+            </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Lista de Compras para la Receta</h1>
+        <p>Encuentra los ingredientes disponibles y compara precios en tus supermercados favoritos:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Ingrediente</th>
+                    <th>Opciones de Compra en Supermercados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ing in receta.ingredientes %}
+                <tr>
+                    <td><strong>{{ ing.nombre|default:ing }}</strong></td>
+                    <td>
+                        {% if ing.url_compra.Jumbo %}
+                            <a href="{{ ing.url_compra.Jumbo }}" class="btn-tienda" target="_blank" rel="noopener">Jumbo</a>
+                        {% endif %}
+                        {% if ing.url_compra.Unimarc %}
+                            <a href="{{ ing.url_compra.Unimarc }}" class="btn-tienda" target="_blank" rel="noopener">Unimarc</a>
+                        {% endif %}
+                        {% if ing.url_compra.Santa_Isabel %}
+                            <a href="{{ ing.url_compra.Santa_Isabel }}" class="btn-tienda" target="_blank" rel="noopener">Santa Isabel</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No hay ingredientes registrados para esta receta.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
