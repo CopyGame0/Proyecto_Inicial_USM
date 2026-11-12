@@ -266,10 +266,41 @@ def obtener_receta(receta_id):
 
     datos = respuesta.json()
     titulo = datos.get("title", "Sin título")
-    ingredientes = []
+
+    #Listas para la traduccion, cantidades y para el buscador 
+    ingredientes_metricos = []
+    ingredientes_descripciones = []
+    ingredientes_nombres = []
+    #ingredientes = []
     for i in datos.get("extendedIngredients", []):
-        if i.get("original"):
-            ingredientes.append(i["original"])
+        #Nombre para el link de compra
+        nombre_limpio = i.get("nameClean") or i.get("name") or ""
+        ingredientes_nombres.append(nombre_limpio)
+
+        #Descripcion de lo que se va a ver 
+        nombre_descriptivo = i.get("originalName") or nombre_limpio
+        ingredientes_descripciones.append(nombre_descriptivo)
+
+        #Extraccion del sistema metrico 
+        metrica = i.get("measures", {}).get("metric", {})
+        cantidad = metrica.get("amount", "")
+        if isinstance(cantidad, float):
+            # Si el número es exacto (ej: 450.0) lo pasamos a entero (450), sino, a 1 decimal
+            cantidad = int(cantidad) if cantidad.is_integer() else round(cantidad, 1)
+
+        unidad = metrica.get("unitShort", "").lower()
+
+        # Diccionario para traducir unidades de volumen/porción que no son g ni ml
+        trad_unidades = {
+            "tbsp": "cda", "tbsps": "cdas", 
+            "tsp": "cdta", "tsps": "cdtas", 
+            "cup": "taza", "cups": "tazas", 
+            "serving": "porción", "servings": "porciones"
+        }
+        unidad_es = trad_unidades.get(unidad, unidad)
+        
+        ingredientes_metricos.append(f"{cantidad} {unidad_es}".strip())
+
             
     pasos = []
     for bloque in datos.get("analyzedInstructions", []):
@@ -277,33 +308,46 @@ def obtener_receta(receta_id):
             if p.get("step"):
                 pasos.append(p["step"])
 
-    # Un solo viaje al traductor: título + ingredientes + pasos
-    originales = [titulo] + ingredientes + pasos
-    
+    # Mandamos al traductor el título, las descripciones y los nombres base
+    originales = [titulo] + ingredientes_descripciones + ingredientes_nombres + pasos
     traducidos = en_a_es_lista(originales)
-    n = len(ingredientes)
+    
+
+    n = len(ingredientes_descripciones)
     titulo_traducido = traducidos[0]
+    descripciones_traducidas = traducidos[1 : 1 + n]
+    nombres_traducidos = traducidos[1 + n : 1 + 2*n]
     
     #separamos los pasos, ya que aveces vienen juntos desde Spoonacular
     pasos_traducidos = []
-    for paso in traducidos[1 + n:]:
+    for paso in traducidos[1 + 2*n :]:
+
         # Usamos la libreria "Regular expression operations", para separar despues de un punto, exclamaciono o pregunta. 
         # Solo si viene depues uma mayuscula, exclamaciono o pregunta.
         separacion = re.split(r'(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])', paso.strip())
+
         for paso_individual in separacion:
             paso_individual = paso_individual.strip()
             if paso_individual:
                 pasos_traducidos.append(paso_individual)
-        
-    ingredientes_traducidos = traducidos[1:1 + n]
-    #Listas con los links de compra 
-
+    # se arma una lista usando el nombre "limpio" para los links y el nombre completo tradicido para la vista de cada ingrediente o paso 
     ingredientes_procesados = []
-    for ing in ingredientes_traducidos:
-        # crea cada link de cada ingrediente 
-        links_recetas = generar_links(ing)
-        ingredientes_procesados.append({"nombre":ing,
-                                        "url_compra": links_recetas})
+    for metrica, descripcion, nombre_limpio in zip(ingredientes_metricos, descripciones_traducidas, nombres_traducidos):
+        links_recetas = generar_links(nombre_limpio)
+        
+        # Armamos la frase final estructurada en español (Ej: "450 g de pechuga de pollo")
+        if metrica:
+            if any(metrica.endswith(u) for u in ["g", "kg", "ml", "l", "cda", "cdas", "cdta", "cdtas", "taza", "tazas"]):
+                frase_final = f"{metrica} de {descripcion}"
+            else:
+                frase_final = f"{metrica} {descripcion}" # Para casos como "1 cebolla"
+        else:
+            frase_final = descripcion
+            
+        ingredientes_procesados.append({
+            "nombre": frase_final.capitalize(),
+            "url_compra": links_recetas
+        })
 
     receta = {
         "id": receta_id,
