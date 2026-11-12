@@ -48,3 +48,23 @@ def detalle_receta(request, receta_id):
     except ErrorPlan as e:
         contexto["error"] = str(e)                     
     return render(request, "recetas/_detalle.html", contexto)
+
+def supermercados_receta(request, receta_id):
+    """
+    Carga los datos de la receta y los links de compra
+    para mostrarlos en la página de supermercados.
+    """
+    contexto = {"receta": None, "error": None}
+    try:
+        contexto["receta"] = obtener_receta(receta_id)
+    except ErrorPlan as e:
+        contexto["error"] = str(e)
+    return render(request, "recetas/supermercados.html", contexto)
+
+# Para volver a la receta desde supermercados.html
+def supermercados_view(request, receta_id):
+    receta = get_object_or_404(Receta, id=receta_id)
+    # ... tu lógica de ingredientes ...
+    return render(request, 'recetas/supermercados.html', {
+        'receta': receta
+    })
