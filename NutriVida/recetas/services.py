@@ -2,7 +2,7 @@
 Este archivo contiene la logia que habla con la API, otra apps llaman a esta con los parametros nesesarios y aqui se preparan para hacer un GET
 """
 import unicodedata
-from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
+from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista,traducir_receta
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -241,6 +241,8 @@ def generar_links(ingrediente):
     #print(links["Unimarc"])
     return links
 
+
+
 def obtener_receta(receta_id):
     """
     Trae UNA receta completa (ingredientes y pasos) y la traduce al español.
@@ -323,30 +325,11 @@ def obtener_receta(receta_id):
                 pasos.append(p["step"])
 
     # Mandamos al traductor el título, las descripciones y los nombres base
-    originales = [titulo] + ingredientes_descripciones + ingredientes_nombres + pasos
-    traducidos = en_a_es_lista(originales)
-    
+    traducidos = traducir_receta(titulo, ingredientes_descripciones, ingredientes_nombres, pasos)
 
-    n = len(ingredientes_descripciones)
-    titulo_traducido = traducidos[0]
-    descripciones_traducidas = traducidos[1 : 1 + n]
-    nombres_traducidos = traducidos[1 + n : 1 + 2*n]
-    
-    #separamos los pasos, ya que aveces vienen juntos desde Spoonacular
-    pasos_traducidos = []
-    for paso in traducidos[1 + 2*n :]:
-
-        # Usamos la libreria "Regular expression operations", para separar despues de un punto, exclamaciono o pregunta. 
-        # Solo si viene depues uma mayuscula, exclamaciono o pregunta.
-        separacion = re.split(r'(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])', paso.strip())
-
-        for paso_individual in separacion:
-            paso_individual = paso_individual.strip()
-            if paso_individual:
-                pasos_traducidos.append(paso_individual)
     # se arma una lista usando el nombre "limpio" para los links y el nombre completo tradicido para la vista de cada ingrediente o paso 
     ingredientes_procesados = []
-    for metrica, descripcion, nombre_limpio in zip(ingredientes_metricos, descripciones_traducidas, nombres_traducidos):
+    for metrica, descripcion, nombre_limpio in zip(ingredientes_metricos, traducidos["descripciones"], traducidos["nombres"]):
         links_recetas = generar_links(nombre_limpio)
         
         # Armamos la frase final estructurada en español (Ej: "450 g de pechuga de pollo")
@@ -365,24 +348,17 @@ def obtener_receta(receta_id):
 
     receta = {
         "id": receta_id,
-        "titulo": titulo_traducido,
+        "titulo": traducidos["titulo"],
         "imagen": datos.get("image", ""),
         "minutos": datos.get("readyInMinutes"),
         "porciones": datos.get("servings"),
         "url": datos.get("sourceUrl", ""),
         "ingredientes": ingredientes_procesados,
-        "pasos": pasos_traducidos,
+        "pasos": traducidos["pasos"],
     }
-
-    #lista de links. Agregar mas links :v
-    links = {}
-    for ing in receta["ingredientes"]:
-        nombre_ing = ing.get("nombre", str(ing))
-        links[nombre_ing] = {"google" : f"http://www.google.com/search?q={nombre_ing}&tbm=shop"}
-    receta["links"] = links
 
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
     # en ese caso no se guarda en caché, para reintentar la próxima vez.
-    if traducidos is not originales:
+    if traducidos["ok"]:
         cache.set(clave_cache, receta, 60 * 60 * 24)
     return receta
