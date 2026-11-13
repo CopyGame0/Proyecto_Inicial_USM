@@ -23,7 +23,7 @@ def plan_demo():
     
     comidas = []
     for c in range(settings.COMIDAS_POR_DIA):
-      comidas.append(_receta(d * 3 + c + 1))
+      comidas.append(_receta(d * settings.COMIDAS_POR_DIA  + c + 1))
       
     # Build the dictionary for the day and add it to the plan
     dia_dict = {"dia": f"Día {d + 1}", "comidas": comidas}
