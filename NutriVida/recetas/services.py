@@ -2,7 +2,7 @@
 Este archivo contiene la logia que habla con la API, otra apps llaman a esta con los parametros nesesarios y aqui se preparan para hacer un GET
 """
 import unicodedata
-from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista
+from .traduccion import ErrorTraduccion, es_a_en_lista, en_a_es_lista,traducir_receta
 import requests
 from django.conf import settings
 from django.core.cache import cache
@@ -241,6 +241,37 @@ def generar_links(ingrediente):
     #print(links["Unimarc"])
     return links
 
+UNIDADES_ES = {
+    "g": "g", "kg": "kg", "ml": "ml", "l": "l",
+    "tbsp": "cda", "tbsps": "cdas",
+    "tsp": "cdta", "tsps": "cdtas",
+    "cup": "taza", "cups": "tazas",
+    "serving": "porción", "servings": "porciones",
+    "clove": "diente", "cloves": "dientes",
+    "pinch": "pizca", "pinches": "pizcas",
+}
+
+#Para sacar la cantidad y unidad de los ingredientes
+def _cantidad_y_unidad(medida):
+   
+    cantidad = medida.get("amount")
+    if not isinstance(cantidad, (int, float)) or cantidad < 0.1:
+        return "", ""
+    cantidad_txt = f"{round(cantidad, 1):g}"          # 450.0 -> "450", 1.5 -> "1.5"
+    unidad = UNIDADES_ES.get(medida.get("unitShort", "").lower(), "")
+    return cantidad_txt, unidad
+
+#Arma la frase en español: "450 g de pechuga de pollo", "1 cebolla".
+def _frase_ingrediente(cantidad, unidad, descripcion):
+    
+    if cantidad and unidad:
+        frase = f"{cantidad} {unidad} de {descripcion}"
+    elif cantidad:
+        frase = f"{cantidad} {descripcion}"
+    else:
+        frase = descripcion
+    return frase[0].upper() + frase[1:]
+
 def obtener_receta(receta_id):
     """
     Trae UNA receta completa (ingredientes y pasos) y la traduce al español.
@@ -280,65 +311,54 @@ def obtener_receta(receta_id):
 
     datos = respuesta.json()
     titulo = datos.get("title", "Sin título")
-    ingredientes = []
+
+    #Listas para la traduccion, cantidades y para el buscador 
+    ingredientes_medidas = [] 
+    ingredientes_metricos = []
+    ingredientes_descripciones = []
+    ingredientes_nombres = []
+    #ingredientes = []
     for i in datos.get("extendedIngredients", []):
-        if i.get("original"):
-            ingredientes.append(i["original"])
-            
+            nombre_limpio = i.get("nameClean") or i.get("name") or ""
+            if not nombre_limpio:
+                continue                 # sin nombre no hay qué mostrar ni buscar
+            ingredientes_nombres.append(nombre_limpio)
+            ingredientes_descripciones.append(i.get("originalName") or nombre_limpio)
+            ingredientes_medidas.append(_cantidad_y_unidad(i.get("measures", {}).get("metric", {})))
+                
+                
     pasos = []
     for bloque in datos.get("analyzedInstructions", []):
         for p in bloque.get("steps", []):
             if p.get("step"):
                 pasos.append(p["step"])
 
-    # Un solo viaje al traductor: título + ingredientes + pasos
-    originales = [titulo] + ingredientes + pasos
-    
-    traducidos = en_a_es_lista(originales)
-    n = len(ingredientes)
-    titulo_traducido = traducidos[0]
-    
-    #separamos los pasos, ya que aveces vienen juntos desde Spoonacular
-    pasos_traducidos = []
-    for paso in traducidos[1 + n:]:
-        # Usamos la libreria "Regular expression operations", para separar despues de un punto, exclamaciono o pregunta. 
-        # Solo si viene depues uma mayuscula, exclamaciono o pregunta.
-        separacion = re.split(r'(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡])', paso.strip())
-        for paso_individual in separacion:
-            paso_individual = paso_individual.strip()
-            if paso_individual:
-                pasos_traducidos.append(paso_individual)
-        
-    ingredientes_traducidos = traducidos[1:1 + n]
-    #Listas con los links de compra 
+    # Mandamos al traductor el título, las descripciones y los nombres base
+    traducidos = traducir_receta(titulo, ingredientes_descripciones, ingredientes_nombres, pasos)
 
+    # se arma una lista usando el nombre "limpio" para los links y el nombre completo tradicido para la vista de cada ingrediente o paso 
     ingredientes_procesados = []
-    for ing in ingredientes_traducidos:
-        # crea cada link de cada ingrediente 
-        links_recetas = generar_links(ing)
-        ingredientes_procesados.append({"nombre":ing,
-                                        "url_compra": links_recetas})
+    for (cantidad, unidad), descripcion, nombre in zip(
+        ingredientes_medidas, traducidos["descripciones"], traducidos["nombres"]
+    ):
+        ingredientes_procesados.append({
+            "nombre": _frase_ingrediente(cantidad, unidad, descripcion),
+            "url_compra": generar_links(nombre),
+        })
 
     receta = {
         "id": receta_id,
-        "titulo": titulo_traducido,
+        "titulo": traducidos["titulo"],
         "imagen": datos.get("image", ""),
         "minutos": datos.get("readyInMinutes"),
         "porciones": datos.get("servings"),
         "url": datos.get("sourceUrl", ""),
         "ingredientes": ingredientes_procesados,
-        "pasos": pasos_traducidos,
+        "pasos": traducidos["pasos"],
     }
-
-    #lista de links. Agregar mas links :v
-    links = {}
-    for ing in receta["ingredientes"]:
-        nombre_ing = ing.get("nombre", str(ing))
-        links[nombre_ing] = {"google" : f"http://www.google.com/search?q={nombre_ing}&tbm=shop"}
-    receta["links"] = links
 
     # Si el traductor falló, en_a_es_lista devuelve la misma lista de entrada:
     # en ese caso no se guarda en caché, para reintentar la próxima vez.
-    if traducidos is not originales:
+    if traducidos["ok"]:
         cache.set(clave_cache, receta, 60 * 60 * 24)
     return receta

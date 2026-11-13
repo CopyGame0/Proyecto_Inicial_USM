@@ -23,7 +23,7 @@ def plan_demo():
     
     comidas = []
     for c in range(settings.COMIDAS_POR_DIA):
-      comidas.append(_receta(d * 3 + c + 1))
+      comidas.append(_receta(d * settings.COMIDAS_POR_DIA  + c + 1))
       
     # Build the dictionary for the day and add it to the plan
     dia_dict = {"dia": f"Día {d + 1}", "comidas": comidas}
@@ -39,16 +39,21 @@ def receta_demo(receta_id):
       links = {"Jumbo" : f"https://www.jumbo.cl/busqueda?ft={ingrediente_seguro}",
               "Google": f"https://www.google.com/search?q={ingrediente_seguro}&udm=28",
               "Unimarc": f"https://www.unimarc.cl/search?q={ingrediente_seguro}",
-              "Santa Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
+              "Santa_Isabel": f"https://www.santaisabel.cl/busqueda?ft={ingrediente_seguro}"}
       return links
   
-    ingredientes_falsos = ["1 taza de arroz", "2 tomates", "Sal a gusto"]
+    ingredientes_falsos = [
+        ("1 taza de arroz", "arroz"),
+        ("2 tomates", "tomate"),
+        ("Sal a gusto", "sal"),
+    ]
+    
     ingredientes_procesados = []
-    for ing in ingredientes_falsos:
-            # crea cada link de cada ingrediente 
-            links_recetas = generar_links(ing)
-            ingredientes_procesados.append({"nombre":ing,
-                                            "url_compra": links_recetas})
+    for frase, nombre in ingredientes_falsos:
+        ingredientes_procesados.append({
+            "nombre": frase,                      
+            "url_compra": generar_links(nombre),  
+        })
   
     return {
       
