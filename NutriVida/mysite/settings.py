@@ -38,8 +38,8 @@ AZURE_TRANSLATOR_ENDPOINT = os.getenv('AZURE_TRANSLATOR_ENDPOINT', 'https://api.
 MODO_DEMO = False
 
 #Cantidad de recetas dadas
-DIAS_DEL_PLAN = 5         
-COMIDAS_POR_DIA = 3
+DIAS_DEL_PLAN = 5       
+COMIDAS_POR_DIA = 2
 
 ALLOWED_HOSTS = []
 
