@@ -29,9 +29,13 @@ TOTAL_RECETAS = settings.DIAS_DEL_PLAN + settings.COMIDAS_POR_DIA
 DIETAS = {
     "vegetariana": "vegetarian",
     "vegana": "vegan",
-    "omnivora": "",    
+    "omnivora": "",
     "vegetarian": "vegetarian",
     "vegan": "vegan",
+    "gluten free": "gluten free",
+    "sin gluten": "gluten free",
+    "ketogenic": "ketogenic",
+    "keto": "ketogenic",
 }
 
 INTOLERANCIAS = {
