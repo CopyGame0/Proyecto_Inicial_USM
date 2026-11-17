@@ -23,7 +23,7 @@ def _traducir_ingredientes(lista):
 
 URL_BUSQUEDA = "https://api.spoonacular.com/recipes/complexSearch"
 
-TOTAL_RECETAS = settings.DIAS_DEL_PLAN + settings.COMIDAS_POR_DIA
+TOTAL_RECETAS = settings.DIAS_DEL_PLAN * settings.COMIDAS_POR_DIA
 
 # Traducciones a valores que entiende Spoonacular (solo acepta inglés) atravez de diccionarios.
 DIETAS = {
