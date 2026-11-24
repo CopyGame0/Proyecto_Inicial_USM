@@ -35,10 +35,10 @@ Una aplicación web para ayudar a conseguir recetas en base a una pauta nutricio
 
 
 #### Instrucciones extra para el desarrollo
-- En settings.py: MODO_DEMO = False
+- En settings.py: MODO_DEMO = False:
   Cambiar a True para probar la interfaz sin utilizar las API (usa datos inventados)
   
-- Errores de traducción
+- Errores de traducción:
 	No se pudieron resolver errores de traducción específicos (E.g. Honey = Cariño), estos no se resolverán por el fin del desarrollo.
 
 
